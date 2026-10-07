@@ -1,0 +1,7 @@
+.godot/
+tools/godot-forge/
+tools/node_modules/
+builds/
+tests/output/
+*.tmp
+*.log

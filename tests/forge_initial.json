@@ -1,0 +1,5 @@
+[
+ ["project", {"action":"info"}, "project-info"],
+ ["scene", {"action":"open", "path":"res://scenes/rooms/library.tscn"}, "open-library"],
+ ["scene", {"action":"tree"}, "library-tree"]
+]

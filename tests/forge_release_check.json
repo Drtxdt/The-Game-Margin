@@ -1,0 +1,248 @@
+[
+  [
+    "run",
+    {
+      "action": "stop"
+    },
+    "stop-before-final"
+  ],
+  [
+    "scene",
+    {
+      "action": "reload",
+      "path": "res://scenes/rooms/library.tscn"
+    },
+    "reload-polished-library"
+  ],
+  [
+    "project",
+    {
+      "action": "add_input_action",
+      "actions": {
+        "left": [
+          "key:A"
+        ],
+        "right": [
+          "key:D"
+        ],
+        "down": [
+          "key:S"
+        ],
+        "jump": [
+          "key:Space"
+        ],
+        "dodge": [
+          "key:Shift"
+        ],
+        "attack": [
+          "key:J"
+        ],
+        "interact": [
+          "key:E"
+        ],
+        "observe": [
+          "key:Q"
+        ],
+        "record": [
+          "key:R"
+        ],
+        "replay": [
+          "key:F"
+        ],
+        "map": [
+          "key:Tab"
+        ],
+        "pause": [
+          "key:Escape"
+        ]
+      }
+    },
+    "editor-input-map"
+  ],
+  [
+    "test",
+    {
+      "action": "scenario",
+      "save_as": "keyboard_smoke",
+      "scenario": {
+        "name": "Keyboard movement and pause",
+        "scene": "main",
+        "keep_running": true,
+        "steps": [
+          {
+            "set": {
+              "path": "/root/State",
+              "props": {
+                "save_path": "user://forge_scenario_qa.json"
+              }
+            }
+          },
+          {
+            "call": {
+              "path": "",
+              "method": "begin",
+              "args": [
+                true
+              ]
+            }
+          },
+          {
+            "wait": 0.4
+          },
+          {
+            "input": [
+              {
+                "action": "right",
+                "hold": 1.0
+              }
+            ]
+          },
+          {
+            "assert": "get_node('Player').position.x > 360",
+            "message": "AD moves the player through real collision"
+          },
+          {
+            "input": [
+              {
+                "action": "jump",
+                "hold": 0.18
+              }
+            ]
+          },
+          {
+            "assert": "get_node('Player').position.y < 580",
+            "message": "Space jumps"
+          },
+          {
+            "wait": 0.6
+          },
+          {
+            "call": {
+              "path": "UI",
+              "method": "show_pause"
+            }
+          },
+          {
+            "assert": "get_tree().paused",
+            "message": "Pause menu pauses gameplay"
+          },
+          {
+            "call": {
+              "path": "UI",
+              "method": "close_all"
+            }
+          },
+          {
+            "assert_no_errors": true
+          }
+        ]
+      }
+    },
+    "forge-keyboard-scenario"
+  ],
+  [
+    "game",
+    {
+      "action": "eval",
+      "expression": "change_room('library',Vector2(790,580))"
+    },
+    "library-final-fixture"
+  ],
+  [
+    "game",
+    {
+      "action": "wait",
+      "seconds": 1
+    },
+    "library-final-settle"
+  ],
+  [
+    "view",
+    {
+      "action": "game",
+      "max_size": 1920
+    },
+    "library-before"
+  ],
+  [
+    "game",
+    {
+      "action": "call",
+      "path": "/root/State",
+      "method": "learn",
+      "args": [
+        "archive"
+      ]
+    },
+    "restore-fixture-book"
+  ],
+  [
+    "game",
+    {
+      "action": "call",
+      "path": "/root/State",
+      "method": "bind_books"
+    },
+    "restore-fixture-return"
+  ],
+  [
+    "game",
+    {
+      "action": "call",
+      "path": "/root/State",
+      "method": "flag",
+      "args": [
+        "boss_purified"
+      ]
+    },
+    "restore-fixture-guardian"
+  ],
+  [
+    "game",
+    {
+      "action": "call",
+      "path": "",
+      "method": "update_library"
+    },
+    "restore-library"
+  ],
+  [
+    "game",
+    {
+      "action": "wait",
+      "seconds": 1
+    },
+    "restored-settle"
+  ],
+  [
+    "view",
+    {
+      "action": "game",
+      "max_size": 1920
+    },
+    "library-after"
+  ],
+  [
+    "game",
+    {
+      "action": "info"
+    },
+    "editor-game-info"
+  ],
+  [
+    "game",
+    {
+      "action": "perf",
+      "sample_seconds": 5
+    },
+    "editor-library-performance"
+  ],
+  [
+    "run",
+    {
+      "action": "errors",
+      "since": 5
+    },
+    "final-new-runtime-errors"
+  ]
+]

@@ -1,0 +1,282 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="e2"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e3"]
+
+[ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="e4"]
+
+[ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
+
+[sub_resource type="RectangleShape2D" id="s1"]
+size = Vector2(3000, 120)
+
+[sub_resource type="RectangleShape2D" id="s2"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s3"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s4"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s5"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s6"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s7"]
+size = Vector2(240, 24)
+
+[node name="回声教室" type="Node2D"]
+metadata/width = 3000
+metadata/room_id = "echo"
+
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("e1")
+room_id = "echo"
+width = 3000.0
+z_index = -10
+
+[node name="Floor0" type="StaticBody2D" parent="."]
+position = Vector2(1500.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor0"]
+shape = SubResource("s1")
+
+[node name="Surface" type="Polygon2D" parent="Floor0"]
+polygon = PackedVector2Array(-1500.0, -60.0, 1500.0, -60.0, 1500.0, 60.0, -1500.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Floor0"]
+points = PackedVector2Array(-1500.0, -60.0, 1500.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("s2")
+
+[node name="Surface" type="Polygon2D" parent="LeftWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="LeftWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(3020, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("s3")
+
+[node name="Surface" type="Polygon2D" parent="RightWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="RightWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object1" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(130, 620)
+kind = "exit"
+stable_id = "echo_Object1"
+title = "图书馆"
+text = ""
+target = "library"
+entry = Vector2(1420, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object1"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "图书馆"
+horizontal_alignment = 1
+
+[node name="Object2" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2780, 620)
+kind = "exit"
+stable_id = "echo_Object2"
+title = "中央连廊"
+text = ""
+target = "junction"
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object2"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "中央连廊"
+horizontal_alignment = 1
+
+[node name="Object3" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1260, 620)
+kind = "anchor"
+stable_id = "echo_anchor"
+title = "了解因果锚点"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Rope" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1550, 365)
+kind = "rope"
+stable_id = "echo_Rope"
+title = "悬绳"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Trolley" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1770, 620)
+kind = "trolley"
+stable_id = "echo_Trolley"
+title = "推动配重车"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = true
+
+[node name="Object6" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(730, 620)
+kind = "note"
+stable_id = "echo_Object6"
+title = "锚点边的字"
+text = "先在锚点边，留下向右挥尺的动作。\n结束录制后，走到推车旁。\n按住交互键，让悬绳进入那一尺的范围；同时调用残响。\n\n下面的维护路也通向另一边。你不必使用残响。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Step2060_0" type="StaticBody2D" parent="."]
+position = Vector2(2060, 530)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step2060_0"]
+shape = SubResource("s4")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step2060_0"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step2060_0"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step2060_1" type="StaticBody2D" parent="."]
+position = Vector2(2220, 445)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step2060_1"]
+shape = SubResource("s5")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step2060_1"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step2060_1"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step2060_2" type="StaticBody2D" parent="."]
+position = Vector2(2380, 360)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step2060_2"]
+shape = SubResource("s6")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step2060_2"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step2060_2"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object7" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2440, 438)
+kind = "exit"
+stable_id = "echo_Object7"
+title = "侧面检修口"
+text = "侧门被悬绳连接的配重锁住。"
+target = "junction"
+entry = Vector2(900, 580)
+requirement = "rope_cut"
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object7"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "侧面检修口"
+horizontal_alignment = 1
+
+[node name="SideLedge" type="StaticBody2D" parent="."]
+position = Vector2(2440, 450)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SideLedge"]
+shape = SubResource("s7")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="SideLedge"]
+polygon = PackedVector2Array(-120.0, -12.0, 120.0, -12.0, 120.0, 12.0, -120.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="SideLedge"]
+points = PackedVector2Array(-120.0, -12.0, 120.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)

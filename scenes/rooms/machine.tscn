@@ -1,0 +1,316 @@
+[gd_scene load_steps=17 format=3]
+
+[ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="e2"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e3"]
+
+[ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="e4"]
+
+[ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
+
+[ext_resource type="Script" path="res://scripts/knowledge_bridge.gd" id="e6"]
+
+[sub_resource type="RectangleShape2D" id="s1"]
+size = Vector2(2670, 120)
+
+[sub_resource type="RectangleShape2D" id="s2"]
+size = Vector2(310, 120)
+
+[sub_resource type="RectangleShape2D" id="s3"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s4"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s5"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s6"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s7"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s8"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s9"]
+size = Vector2(260, 24)
+
+[sub_resource type="RectangleShape2D" id="s10"]
+size = Vector2(440, 24)
+
+[node name="机电间" type="Node2D"]
+metadata/width = 3400
+metadata/room_id = "machine"
+
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("e1")
+room_id = "machine"
+width = 3400.0
+z_index = -10
+
+[node name="Floor0" type="StaticBody2D" parent="."]
+position = Vector2(1335.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor0"]
+shape = SubResource("s1")
+
+[node name="Surface" type="Polygon2D" parent="Floor0"]
+polygon = PackedVector2Array(-1335.0, -60.0, 1335.0, -60.0, 1335.0, 60.0, -1335.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Floor0"]
+points = PackedVector2Array(-1335.0, -60.0, 1335.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Floor1" type="StaticBody2D" parent="."]
+position = Vector2(3245.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor1"]
+shape = SubResource("s2")
+
+[node name="Surface" type="Polygon2D" parent="Floor1"]
+polygon = PackedVector2Array(-155.0, -60.0, 155.0, -60.0, 155.0, 60.0, -155.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Floor1"]
+points = PackedVector2Array(-155.0, -60.0, 155.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("s3")
+
+[node name="Surface" type="Polygon2D" parent="LeftWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="LeftWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(3420, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("s4")
+
+[node name="Surface" type="Polygon2D" parent="RightWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="RightWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object1" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(140, 620)
+kind = "exit"
+stable_id = "machine_Object1"
+title = "中央连廊"
+text = ""
+target = "junction"
+entry = Vector2(930, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object1"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "中央连廊"
+horizontal_alignment = 1
+
+[node name="Object2" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(3180, 620)
+kind = "exit"
+stable_id = "machine_Object2"
+title = "钟庭机械桥"
+text = "配重过重，桥板还没有抬起。"
+target = "bell"
+entry = Vector2(150, 580)
+requirement = "physics_open"
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object2"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "钟庭机械桥"
+horizontal_alignment = 1
+
+[node name="Object3" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(580, 620)
+kind = "note"
+stable_id = "machine_Object3"
+title = "力矩示意图"
+text = "同样的力，作用点离支点越远，越容易抬起另一端的重物。\n\n这台机器的负载固定在右侧。支点仍可移动。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Object4" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2190, 620)
+kind = "lever"
+stable_id = "machine_Object4"
+title = "调整支点"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Step1120_0" type="StaticBody2D" parent="."]
+position = Vector2(1120, 535)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step1120_0"]
+shape = SubResource("s5")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step1120_0"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step1120_0"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step1120_1" type="StaticBody2D" parent="."]
+position = Vector2(1280, 450)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step1120_1"]
+shape = SubResource("s6")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step1120_1"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step1120_1"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step1120_2" type="StaticBody2D" parent="."]
+position = Vector2(1440, 365)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step1120_2"]
+shape = SubResource("s7")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step1120_2"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step1120_2"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step1120_3" type="StaticBody2D" parent="."]
+position = Vector2(1600, 280)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step1120_3"]
+shape = SubResource("s8")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step1120_3"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step1120_3"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="MachineDeck" type="StaticBody2D" parent="."]
+position = Vector2(1840, 290)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MachineDeck"]
+shape = SubResource("s9")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="MachineDeck"]
+polygon = PackedVector2Array(-130.0, -12.0, 130.0, -12.0, 130.0, 12.0, -130.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="MachineDeck"]
+points = PackedVector2Array(-130.0, -12.0, 130.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Enemy5" parent="." instance=ExtResource("e4")]
+position = Vector2(2550, 620)
+kind = "charger"
+stable_id = "machine_animal_5"
+
+[node name="Object6" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2480, 620)
+kind = "checkpoint"
+stable_id = "machine_Object6"
+title = "机械桥前休息"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="FulcrumBridge" type="AnimatableBody2D" parent="."]
+script = ExtResource("e6")
+position = Vector2(2880, 632)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FulcrumBridge"]
+shape = SubResource("s10")
+
+[node name="Plank" type="Polygon2D" parent="FulcrumBridge"]
+polygon = PackedVector2Array(-220,-12,220,-12,220,12,-220,12)
+color = Color(0.58,0.57,0.40,1)
+
+[node name="Pivot" type="Polygon2D" parent="."]
+position = Vector2(2580, 620)
+polygon = PackedVector2Array(-25,0,25,0,0,-48)
+color = Color(0.68,0.64,0.46,1)

@@ -1,0 +1,560 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui.gd" id="e1"]
+
+[ext_resource type="Theme" path="res://resources/ui_theme.tres" id="e2"]
+
+[ext_resource type="Script" path="res://scripts/map_drawing.gd" id="e3"]
+
+[ext_resource type="Texture2D" path="res://assets/art/library.png" id="e4"]
+
+[node name="UI" type="CanvasLayer"]
+script = ExtResource("e1")
+layer = 10
+process_mode = 3
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Readability" type="ColorRect" parent="HUD"]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_right = 1280.0
+offset_bottom = 86.0
+color = Color(0.035,0.065,0.075,0.64)
+
+[node name="Top" type="Control" parent="HUD"]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 24.0
+offset_top = 18.0
+offset_right = 455.0
+offset_bottom = 94.0
+
+[node name="Health" type="Label" parent="HUD/Top"]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 320.0
+offset_bottom = 26.0
+text = ""
+theme_override_font_sizes/font_size = 18
+
+[node name="Sanity" type="Label" parent="HUD/Top"]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 0.0
+offset_top = 29.0
+offset_right = 155.0
+offset_bottom = 57.0
+text = ""
+theme_override_font_sizes/font_size = 17
+
+[node name="Branch" type="Label" parent="HUD/Top"]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 270.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 30.0
+text = ""
+theme_override_font_sizes/font_size = 16
+
+[node name="SanityBar" type="ProgressBar" parent="HUD/Top"]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 163.0
+offset_top = 42.0
+offset_right = 322.0
+offset_bottom = 47.0
+show_percentage = false
+
+[node name="Objective" type="Label" parent="HUD"]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 640.0
+offset_top = 24.0
+offset_right = 1250.0
+offset_bottom = 54.0
+text = ""
+theme_override_font_sizes/font_size = 17
+
+[node name="Footer" type="Label" parent="HUD"]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 28.0
+offset_top = 676.0
+offset_right = 748.0
+offset_bottom = 701.0
+text = ""
+theme_override_font_sizes/font_size = 14
+
+[node name="Echo" type="Label" parent="HUD"]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 810.0
+offset_top = 670.0
+offset_right = 1230.0
+offset_bottom = 705.0
+text = ""
+theme_override_font_sizes/font_size = 17
+
+[node name="Observation" type="Label" parent="HUD"]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 160.0
+offset_top = 105.0
+offset_right = 1160.0
+offset_bottom = 150.0
+text = ""
+theme_override_font_sizes/font_size = 18
+
+[node name="Toast" type="Label" parent="."]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 120.0
+offset_top = 590.0
+offset_right = 1160.0
+offset_bottom = 658.0
+text = ""
+theme_override_font_sizes/font_size = 19
+horizontal_alignment = 1
+autowrap_mode = 2
+visible = false
+
+[node name="Prompt" type="Label" parent="."]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 300.0
+offset_top = 628.0
+offset_right = 980.0
+offset_bottom = 668.0
+text = ""
+theme_override_font_sizes/font_size = 19
+horizontal_alignment = 1
+
+[node name="RoomTitle" type="Label" parent="."]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 830.0
+offset_top = 87.0
+offset_right = 1230.0
+offset_bottom = 187.0
+text = ""
+theme_override_font_sizes/font_size = 25
+horizontal_alignment = 2
+
+[node name="Home" type="Control" parent="."]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="Home"]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.015,0.03,0.04,0.80)
+
+[node name="Panel" type="PanelContainer" parent="Home"]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+offset_left = 390.0
+offset_top = 95.0
+offset_right = 890.0
+offset_bottom = 625.0
+
+[node name="Body" type="VBoxContainer" parent="Home/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 13
+
+[node name="Eyebrow" type="Label" parent="Home/Panel/Body"]
+layout_mode = 2
+text = "一 所 被 留 下 的 学 校"
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="Home/Panel/Body"]
+layout_mode = 2
+text = "余 页"
+theme_override_font_sizes/font_size = 72
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Home/Panel/Body"]
+layout_mode = 2
+text = "M A R G I N"
+theme_override_font_sizes/font_size = 19
+horizontal_alignment = 1
+
+[node name="Line" type="Label" parent="Home/Panel/Body"]
+layout_mode = 2
+text = "过去的动作，写下现在的答案。"
+theme_override_font_sizes/font_size = 17
+horizontal_alignment = 1
+
+[node name="Continue" type="Button" parent="Home/Panel/Body"]
+layout_mode = 2
+text = "继续旅程"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="New" type="Button" parent="Home/Panel/Body"]
+layout_mode = 2
+text = "开始新的旅程"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Settings" type="Button" parent="Home/Panel/Body"]
+layout_mode = 2
+text = "设置与按键"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Quit" type="Button" parent="Home/Panel/Body"]
+layout_mode = 2
+text = "离开"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Pause" type="Control" parent="."]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="Pause"]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.015,0.03,0.04,0.80)
+
+[node name="Panel" type="PanelContainer" parent="Pause"]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+offset_left = 400.0
+offset_top = 160.0
+offset_right = 880.0
+offset_bottom = 560.0
+
+[node name="Body" type="VBoxContainer" parent="Pause/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 13
+
+[node name="Title" type="Label" parent="Pause/Panel/Body"]
+layout_mode = 2
+text = "暂且合上这一页"
+theme_override_font_sizes/font_size = 29
+horizontal_alignment = 1
+
+[node name="Resume" type="Button" parent="Pause/Panel/Body"]
+layout_mode = 2
+text = "继续"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Settings" type="Button" parent="Pause/Panel/Body"]
+layout_mode = 2
+text = "设置与按键"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Home" type="Button" parent="Pause/Panel/Body"]
+layout_mode = 2
+text = "返回标题"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Quit" type="Button" parent="Pause/Panel/Body"]
+layout_mode = 2
+text = "保存并离开"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Dialogue" type="Control" parent="."]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="Dialogue"]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.015,0.03,0.04,0.80)
+
+[node name="Panel" type="PanelContainer" parent="Dialogue"]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+offset_left = 180.0
+offset_top = 110.0
+offset_right = 1100.0
+offset_bottom = 610.0
+
+[node name="Body" type="VBoxContainer" parent="Dialogue/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 13
+
+[node name="Title" type="Label" parent="Dialogue/Panel/Body"]
+layout_mode = 2
+text = ""
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 1
+
+[node name="Text" type="RichTextLabel" parent="Dialogue/Panel/Body"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 292)
+size_flags_vertical = 3
+bbcode_enabled = false
+theme_override_font_sizes/normal_font_size = 22
+theme_override_constants/line_separation = 8
+
+[node name="Choices" type="HBoxContainer" parent="Dialogue/Panel/Body"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="First" type="Button" parent="Dialogue/Panel/Body/Choices"]
+layout_mode = 2
+text = "继续"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Second" type="Button" parent="Dialogue/Panel/Body/Choices"]
+layout_mode = 2
+text = "继续"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Third" type="Button" parent="Dialogue/Panel/Body/Choices"]
+layout_mode = 2
+text = "继续"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Map" type="Control" parent="."]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="Map"]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.015,0.03,0.04,0.80)
+
+[node name="Panel" type="PanelContainer" parent="Map"]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+offset_left = 120.0
+offset_top = 55.0
+offset_right = 1160.0
+offset_bottom = 665.0
+
+[node name="Body" type="VBoxContainer" parent="Map/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 13
+
+[node name="Title" type="Label" parent="Map/Panel/Body"]
+layout_mode = 2
+text = "走过的地方"
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 1
+
+[node name="MapDrawing" type="Control" parent="Map/Panel/Body"]
+layout_mode = 2
+custom_minimum_size = Vector2(930, 365)
+script = ExtResource("e3")
+
+[node name="Notes" type="Label" parent="Map/Panel/Body"]
+layout_mode = 2
+text = ""
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="Close" type="Button" parent="Map/Panel/Body"]
+layout_mode = 2
+text = "返回"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Settings" type="Control" parent="."]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shade" type="ColorRect" parent="Settings"]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.015,0.03,0.04,0.80)
+
+[node name="Panel" type="PanelContainer" parent="Settings"]
+layout_mode = 0
+mouse_filter = 0
+theme = ExtResource("e2")
+offset_left = 300.0
+offset_top = 35.0
+offset_right = 980.0
+offset_bottom = 685.0
+
+[node name="Body" type="VBoxContainer" parent="Settings/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 13
+
+[node name="Title" type="Label" parent="Settings/Panel/Body"]
+layout_mode = 2
+text = "设置与按键"
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 1
+
+[node name="Volume" type="HSlider" parent="Settings/Panel/Body"]
+layout_mode = 2
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 0.55
+tooltip_text = "主音量"
+
+[node name="Fullscreen" type="CheckButton" parent="Settings/Panel/Body"]
+layout_mode = 2
+text = "全屏显示"
+
+[node name="Scroll" type="ScrollContainer" parent="Settings/Panel/Body"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 370)
+size_flags_vertical = 3
+
+[node name="Bindings" type="VBoxContainer" parent="Settings/Panel/Body/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="left" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "left"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="right" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "right"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="down" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "down"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="jump" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "jump"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="dodge" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "dodge"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="attack" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "attack"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="interact" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "interact"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="observe" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "observe"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="record" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "record"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="replay" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "replay"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="map" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "map"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="pause" type="Button" parent="Settings/Panel/Body/Scroll/Bindings"]
+layout_mode = 2
+text = "pause"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Close" type="Button" parent="Settings/Panel/Body"]
+layout_mode = 2
+text = "返回"
+custom_minimum_size = Vector2(0, 43)
+
+[node name="Annotation" type="Label" parent="."]
+layout_mode = 0
+mouse_filter = 2
+theme = ExtResource("e2")
+offset_left = 650.0
+offset_top = 215.0
+offset_right = 1170.0
+offset_bottom = 375.0
+text = ""
+theme_override_font_sizes/font_size = 31
+modulate = Color(1,0.48,0.40,0)
+horizontal_alignment = 1

@@ -1,0 +1,232 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="e2"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e3"]
+
+[ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="e4"]
+
+[ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
+
+[ext_resource type="Script" path="res://scripts/moving_platform.gd" id="e6"]
+
+[sub_resource type="RectangleShape2D" id="s1"]
+size = Vector2(3600, 120)
+
+[sub_resource type="RectangleShape2D" id="s2"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s3"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s4"]
+size = Vector2(150, 24)
+
+[sub_resource type="RectangleShape2D" id="s5"]
+size = Vector2(330, 24)
+
+[node name="教学走廊" type="Node2D"]
+metadata/width = 3600
+metadata/room_id = "hall"
+
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("e1")
+room_id = "hall"
+width = 3600.0
+z_index = -10
+
+[node name="Floor0" type="StaticBody2D" parent="."]
+position = Vector2(1800.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor0"]
+shape = SubResource("s1")
+
+[node name="Surface" type="Polygon2D" parent="Floor0"]
+polygon = PackedVector2Array(-1800.0, -60.0, 1800.0, -60.0, 1800.0, 60.0, -1800.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Floor0"]
+points = PackedVector2Array(-1800.0, -60.0, 1800.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("s2")
+
+[node name="Surface" type="Polygon2D" parent="LeftWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="LeftWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(3620, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("s3")
+
+[node name="Surface" type="Polygon2D" parent="RightWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="RightWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object1" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(130, 620)
+kind = "exit"
+stable_id = "hall_Object1"
+title = "前院"
+text = ""
+target = "courtyard"
+entry = Vector2(3250, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object1"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "前院"
+horizontal_alignment = 1
+
+[node name="Object2" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1110, 620)
+kind = "exit"
+stable_id = "hall_Object2"
+title = "器材室"
+text = ""
+target = "equipment"
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object2"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "器材室"
+horizontal_alignment = 1
+
+[node name="Object3" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2410, 620)
+kind = "exit"
+stable_id = "hall_Object3"
+title = "图书馆"
+text = "通往旧馆的门被变形的铁扣卡住。器材室里也许有工具。"
+target = "library"
+entry = Vector2(150, 580)
+requirement = "ruler"
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object3"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "图书馆"
+horizontal_alignment = 1
+
+[node name="Lift" type="AnimatableBody2D" parent="." groups=["moving_platforms"]]
+position = Vector2(1800, 545)
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("e6")
+travel = Vector2(0, -145)
+period = 4.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Lift"]
+shape = SubResource("s4")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Lift"]
+polygon = PackedVector2Array(-75.0, -12.0, 75.0, -12.0, 75.0, 12.0, -75.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Lift"]
+points = PackedVector2Array(-75.0, -12.0, 75.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="UpperWalk" type="StaticBody2D" parent="."]
+position = Vector2(2040, 330)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpperWalk"]
+shape = SubResource("s5")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="UpperWalk"]
+polygon = PackedVector2Array(-165.0, -12.0, 165.0, -12.0, 165.0, 12.0, -165.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="UpperWalk"]
+points = PackedVector2Array(-165.0, -12.0, 165.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object4" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2090, 318)
+kind = "exit"
+stable_id = "hall_Object4"
+title = "测量廊"
+text = ""
+target = "measure"
+entry = Vector2(3210, 245)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object4"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "测量廊"
+horizontal_alignment = 1
+
+[node name="Object5" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(3070, 620)
+kind = "note"
+stable_id = "hall_Object5"
+title = "旧门牌"
+text = "图书馆：向内走。\n器材室：不要让折尺留在潮湿的地方。\n\n纸背面画着一段重复上升又下降的曲线。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false

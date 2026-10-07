@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/world.gd" id="e1"]
+
+[ext_resource type="PackedScene" path="res://scenes/entities/player.tscn" id="e2"]
+
+[ext_resource type="PackedScene" path="res://scenes/ui/game_ui.tscn" id="e3"]
+
+[ext_resource type="AudioStream" path="res://assets/audio/ambient.wav" id="e4"]
+
+[ext_resource type="AudioStream" path="res://assets/audio/warm.wav" id="e5"]
+
+[node name="Margin" type="Node2D" groups=["world"]]
+script = ExtResource("e1")
+
+[node name="Player" parent="." instance=ExtResource("e2")]
+position = Vector2(150, 580)
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("e4")
+volume_db = -18.0
+autoplay = true
+
+[node name="MusicWarm" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("e5")
+volume_db = -45.0
+autoplay = true
+
+[node name="UI" parent="." instance=ExtResource("e3")]
+

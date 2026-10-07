@@ -1,0 +1,217 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="e2"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e3"]
+
+[ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="e4"]
+
+[ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
+
+[sub_resource type="RectangleShape2D" id="s1"]
+size = Vector2(3000, 120)
+
+[sub_resource type="RectangleShape2D" id="s2"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s3"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s4"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s5"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s6"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s7"]
+size = Vector2(84, 16)
+
+[node name="器材室" type="Node2D"]
+metadata/width = 3000
+metadata/room_id = "equipment"
+
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("e1")
+room_id = "equipment"
+width = 3000.0
+z_index = -10
+
+[node name="Floor0" type="StaticBody2D" parent="."]
+position = Vector2(1500.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor0"]
+shape = SubResource("s1")
+
+[node name="Surface" type="Polygon2D" parent="Floor0"]
+polygon = PackedVector2Array(-1500.0, -60.0, 1500.0, -60.0, 1500.0, 60.0, -1500.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Floor0"]
+points = PackedVector2Array(-1500.0, -60.0, 1500.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("s2")
+
+[node name="Surface" type="Polygon2D" parent="LeftWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="LeftWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(3020, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("s3")
+
+[node name="Surface" type="Polygon2D" parent="RightWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="RightWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object1" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(120, 620)
+kind = "exit"
+stable_id = "equipment_Object1"
+title = "教学走廊"
+text = ""
+target = "hall"
+entry = Vector2(970, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object1"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "教学走廊"
+horizontal_alignment = 1
+
+[node name="Object2" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1150, 620)
+kind = "ruler"
+stable_id = "equipment_Object2"
+title = "拿起折尺"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Step570_0" type="StaticBody2D" parent="."]
+position = Vector2(570, 535)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step570_0"]
+shape = SubResource("s4")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step570_0"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step570_0"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step570_1" type="StaticBody2D" parent="."]
+position = Vector2(730, 450)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step570_1"]
+shape = SubResource("s5")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step570_1"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step570_1"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step570_2" type="StaticBody2D" parent="."]
+position = Vector2(890, 365)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step570_2"]
+shape = SubResource("s6")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step570_2"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step570_2"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="MetalBench" type="StaticBody2D" parent="." groups=["metal"]]
+position = Vector2(1850, 542)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MetalBench"]
+shape = SubResource("s7")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="MetalBench"]
+polygon = PackedVector2Array(-42.0, -8.0, 42.0, -8.0, 42.0, 8.0, -42.0, 8.0)
+color = Color(0.64,0.59,0.43,1)
+
+[node name="Edge" type="Line2D" parent="MetalBench"]
+points = PackedVector2Array(-42.0, -8.0, 42.0, -8.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object3" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2160, 620)
+kind = "note"
+stable_id = "equipment_Object3"
+title = "器材保养记录"
+text = "折尺展开后需要锁定。\n硬质金属表面会返还下压的力；木头则会吸收它。\n\n实验室里，刻度是一种语言。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Enemy4" parent="." instance=ExtResource("e4")]
+position = Vector2(2530, 620)
+kind = "watcher"
+stable_id = "equipment_animal_4"

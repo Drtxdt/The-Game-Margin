@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/death_visual.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e2"]
+
+[node name="Death" type="Node2D"]
+script = ExtResource("e1")
+modulate = Color(0.66,0.78,0.8,0.27)
+
+[node name="Art" type="Node2D" parent="."]
+script = ExtResource("e2")
+echo = true

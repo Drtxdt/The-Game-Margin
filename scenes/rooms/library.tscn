@@ -1,0 +1,234 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="e2"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e3"]
+
+[ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="e4"]
+
+[ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
+
+[ext_resource type="Texture2D" path="res://assets/art/library.png" id="e6"]
+
+[ext_resource type="Script" path="res://scripts/library_atmosphere.gd" id="e7"]
+
+[sub_resource type="RectangleShape2D" id="s1"]
+size = Vector2(1920, 120)
+
+[sub_resource type="RectangleShape2D" id="s2"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s3"]
+size = Vector2(40, 1100)
+
+[node name="图书馆" type="Node2D"]
+metadata/width = 1920
+metadata/room_id = "library"
+
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("e1")
+room_id = "library"
+width = 1920.0
+z_index = -10
+
+[node name="Floor0" type="StaticBody2D" parent="."]
+position = Vector2(960.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor0"]
+shape = SubResource("s1")
+visible = false
+
+[node name="Surface" type="Polygon2D" parent="Floor0"]
+polygon = PackedVector2Array(-960.0, -60.0, 960.0, -60.0, 960.0, 60.0, -960.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+visible = false
+
+[node name="Edge" type="Line2D" parent="Floor0"]
+points = PackedVector2Array(-960.0, -60.0, 960.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+visible = false
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("s2")
+
+[node name="Surface" type="Polygon2D" parent="LeftWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="LeftWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(1940, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("s3")
+
+[node name="Surface" type="Polygon2D" parent="RightWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="RightWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Painting" type="Sprite2D" parent="."]
+texture = ExtResource("e6")
+centered = false
+position = Vector2(0, -245)
+scale = Vector2(1.1483253588516746, 1.1477151965993624)
+z_index = -8
+
+[node name="RestoredLight" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(430,40,570,40,830,620,210,620)
+color = Color(0.96,0.76,0.4,0.12)
+z_index = -4
+visible = false
+
+[node name="DustAndLight" type="Node2D" parent="."]
+script = ExtResource("e7")
+z_index = 2
+
+[node name="Object1" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(130, 620)
+kind = "exit"
+stable_id = "library_Object1"
+title = "教学走廊"
+text = ""
+target = "hall"
+entry = Vector2(2300, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object1"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "教学走廊"
+horizontal_alignment = 1
+
+[node name="Object2" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1740, 620)
+kind = "exit"
+stable_id = "library_Object2"
+title = "旧书库"
+text = ""
+target = "stacks"
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object2"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "旧书库"
+horizontal_alignment = 1
+
+[node name="Object3" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1530, 620)
+kind = "exit"
+stable_id = "library_Object3"
+title = "回声教室"
+text = ""
+target = "echo"
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object3"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "回声教室"
+horizontal_alignment = 1
+
+[node name="Object4" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(570, 620)
+kind = "cooper"
+stable_id = "library_cooper"
+title = "和库珀说话"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="CooperArt" type="Node2D" parent="Object4"]
+script = ExtResource("e3")
+kind = "collie"
+peaceful = true
+
+[node name="Object5" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1010, 620)
+kind = "return"
+stable_id = "library_Object5"
+title = "归还书籍"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Object6" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1290, 620)
+kind = "major"
+stable_id = "library_Object6"
+title = "研习主修"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Object7" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(330, 620)
+kind = "checkpoint"
+stable_id = "library_Object7"
+title = "休息与保存"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="GuardianHome" type="Node2D" parent="."]
+position = Vector2(750, 620)
+script = ExtResource("e3")
+kind = "guardian"
+peaceful = true
+visible = false

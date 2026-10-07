@@ -1,0 +1,277 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="e2"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e3"]
+
+[ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="e4"]
+
+[ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
+
+[sub_resource type="RectangleShape2D" id="s1"]
+size = Vector2(1900, 120)
+
+[sub_resource type="RectangleShape2D" id="s2"]
+size = Vector2(1780, 120)
+
+[sub_resource type="RectangleShape2D" id="s3"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s4"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s5"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s6"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s7"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s8"]
+size = Vector2(350, 24)
+
+[node name="档案井" type="Node2D"]
+metadata/width = 3800
+metadata/room_id = "archive"
+
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("e1")
+room_id = "archive"
+width = 3800.0
+z_index = -10
+
+[node name="Floor0" type="StaticBody2D" parent="."]
+position = Vector2(950.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor0"]
+shape = SubResource("s1")
+
+[node name="Surface" type="Polygon2D" parent="Floor0"]
+polygon = PackedVector2Array(-950.0, -60.0, 950.0, -60.0, 950.0, 60.0, -950.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Floor0"]
+points = PackedVector2Array(-950.0, -60.0, 950.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Floor1" type="StaticBody2D" parent="."]
+position = Vector2(2910.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor1"]
+shape = SubResource("s2")
+
+[node name="Surface" type="Polygon2D" parent="Floor1"]
+polygon = PackedVector2Array(-890.0, -60.0, 890.0, -60.0, 890.0, 60.0, -890.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Floor1"]
+points = PackedVector2Array(-890.0, -60.0, 890.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("s3")
+
+[node name="Surface" type="Polygon2D" parent="LeftWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="LeftWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(3820, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("s4")
+
+[node name="Surface" type="Polygon2D" parent="RightWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="RightWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object1" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(130, 620)
+kind = "exit"
+stable_id = "archive_Object1"
+title = "研究层"
+text = ""
+target = "research"
+entry = Vector2(3100, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object1"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "研究层"
+horizontal_alignment = 1
+
+[node name="Object2" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(3510, 620)
+kind = "exit"
+stable_id = "archive_Object2"
+title = "旧书库升降梯"
+text = "先解除旁边的升降梯机械锁。"
+target = "stacks"
+entry = Vector2(2820, 580)
+requirement = "archive_lift"
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object2"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "旧书库升降梯"
+horizontal_alignment = 1
+
+[node name="Object3" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2600, 348)
+kind = "book"
+stable_id = "archive"
+title = "取下共振档案"
+text = "记录中的学校，并没有从世界上消失。\n它被保存在了另一种状态里。\n\n“请将原始档案归还地面图书馆。\n那里仍然是稳定的。”"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Step2110_0" type="StaticBody2D" parent="."]
+position = Vector2(2110, 535)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step2110_0"]
+shape = SubResource("s5")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step2110_0"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step2110_0"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step2110_1" type="StaticBody2D" parent="."]
+position = Vector2(2270, 450)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step2110_1"]
+shape = SubResource("s6")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step2110_1"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step2110_1"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step2110_2" type="StaticBody2D" parent="."]
+position = Vector2(2430, 365)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step2110_2"]
+shape = SubResource("s7")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step2110_2"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step2110_2"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="ArchiveLedge" type="StaticBody2D" parent="."]
+position = Vector2(2660, 360)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArchiveLedge"]
+shape = SubResource("s8")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="ArchiveLedge"]
+polygon = PackedVector2Array(-175.0, -12.0, 175.0, -12.0, 175.0, 12.0, -175.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="ArchiveLedge"]
+points = PackedVector2Array(-175.0, -12.0, 175.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object4" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(3240, 620)
+kind = "switch"
+stable_id = "archive_lift"
+title = "解除升降梯机械锁"
+text = "升降梯连通了旧书库。你认出了头顶熟悉的书架。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Object5" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(820, 620)
+kind = "terminal"
+stable_id = "archive_Object5"
+title = "旧馆登记终端"
+text = "图书馆并非新建在研究所上方。\n研究所是沿着图书馆的锚点向下延伸的。\n\n阅读会改变记忆。归还是为了让记忆有一个位置。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Enemy6" parent="." instance=ExtResource("e4")]
+position = Vector2(1450, 620)
+kind = "charger"
+stable_id = "archive_animal_6"
+
+[node name="Enemy7" parent="." instance=ExtResource("e4")]
+position = Vector2(2950, 390)
+kind = "flier"
+stable_id = "archive_animal_7"

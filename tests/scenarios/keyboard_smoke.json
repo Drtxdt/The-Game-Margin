@@ -1,0 +1,73 @@
+{
+  "name": "Keyboard movement and pause",
+  "scene": "main",
+  "keep_running": true,
+  "steps": [
+    {
+      "set": {
+        "path": "/root/State",
+        "props": {
+          "save_path": "user://forge_scenario_qa.json"
+        }
+      }
+    },
+    {
+      "call": {
+        "path": "",
+        "method": "begin",
+        "args": [
+          true
+        ]
+      }
+    },
+    {
+      "wait": 0.4
+    },
+    {
+      "input": [
+        {
+          "action": "right",
+          "hold": 1
+        }
+      ]
+    },
+    {
+      "assert": "get_node('Player').position.x > 360",
+      "message": "AD moves the player through real collision"
+    },
+    {
+      "input": [
+        {
+          "action": "jump",
+          "hold": 0.18
+        }
+      ]
+    },
+    {
+      "assert": "get_node('Player').position.y < 580",
+      "message": "Space jumps"
+    },
+    {
+      "wait": 0.6
+    },
+    {
+      "call": {
+        "path": "UI",
+        "method": "show_pause"
+      }
+    },
+    {
+      "assert": "get_tree().paused",
+      "message": "Pause menu pauses gameplay"
+    },
+    {
+      "call": {
+        "path": "UI",
+        "method": "close_all"
+      }
+    },
+    {
+      "assert_no_errors": true
+    }
+  ]
+}

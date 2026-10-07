@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e2"]
+
+[sub_resource type="RectangleShape2D" id="s1"]
+size = Vector2(44, 42)
+
+[node name="Enemy" type="CharacterBody2D" groups=["enemies"]]
+script = ExtResource("e1")
+collision_layer = 4
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -23)
+shape = SubResource("s1")
+
+[node name="Art" type="Node2D" parent="."]
+script = ExtResource("e2")
+kind = "charger"

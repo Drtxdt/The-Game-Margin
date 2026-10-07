@@ -1,0 +1,264 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="e2"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e3"]
+
+[ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="e4"]
+
+[ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
+
+[sub_resource type="RectangleShape2D" id="s1"]
+size = Vector2(3400, 120)
+
+[sub_resource type="RectangleShape2D" id="s2"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s3"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s4"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s5"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s6"]
+size = Vector2(120, 24)
+
+[sub_resource type="RectangleShape2D" id="s7"]
+size = Vector2(280, 24)
+
+[node name="安保室" type="Node2D"]
+metadata/width = 3400
+metadata/room_id = "security"
+
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("e1")
+room_id = "security"
+width = 3400.0
+z_index = -10
+
+[node name="Floor0" type="StaticBody2D" parent="."]
+position = Vector2(1700.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor0"]
+shape = SubResource("s1")
+
+[node name="Surface" type="Polygon2D" parent="Floor0"]
+polygon = PackedVector2Array(-1700.0, -60.0, 1700.0, -60.0, 1700.0, 60.0, -1700.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Floor0"]
+points = PackedVector2Array(-1700.0, -60.0, 1700.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("s2")
+
+[node name="Surface" type="Polygon2D" parent="LeftWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="LeftWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(3420, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("s3")
+
+[node name="Surface" type="Polygon2D" parent="RightWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="RightWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object1" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(140, 620)
+kind = "exit"
+stable_id = "security_Object1"
+title = "中央连廊"
+text = ""
+target = "junction"
+entry = Vector2(1620, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object1"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "中央连廊"
+horizontal_alignment = 1
+
+[node name="Object2" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(3180, 620)
+kind = "exit"
+stable_id = "security_Object2"
+title = "钟庭安保门"
+text = "依据安保条款，通道保持关闭。"
+target = "bell"
+entry = Vector2(150, 580)
+requirement = "politics_open"
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object2"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "钟庭安保门"
+horizontal_alignment = 1
+
+[node name="Object3" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(670, 620)
+kind = "note"
+stable_id = "security_Object3"
+title = "安保条款"
+text = "第 4 条：实验设施无四级许可不得通行。\n第 6 条：本地门禁遵守上级安全协议。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Object4" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1660, 432)
+kind = "note"
+stable_id = "security_Object4"
+title = "消防条款"
+text = "第 17 条：疏散状态优先于实验室安保规定。\n第 18 条：维护人员可在确认通路后进入疏散维护状态。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Step1160_0" type="StaticBody2D" parent="."]
+position = Vector2(1160, 535)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step1160_0"]
+shape = SubResource("s4")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step1160_0"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step1160_0"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step1160_1" type="StaticBody2D" parent="."]
+position = Vector2(1320, 450)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step1160_1"]
+shape = SubResource("s5")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step1160_1"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step1160_1"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Step1160_2" type="StaticBody2D" parent="."]
+position = Vector2(1480, 365)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step1160_2"]
+shape = SubResource("s6")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="Step1160_2"]
+polygon = PackedVector2Array(-60.0, -12.0, 60.0, -12.0, 60.0, 12.0, -60.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Step1160_2"]
+points = PackedVector2Array(-60.0, -12.0, 60.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="FileLedge" type="StaticBody2D" parent="."]
+position = Vector2(1690, 444)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FileLedge"]
+shape = SubResource("s7")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="FileLedge"]
+polygon = PackedVector2Array(-140.0, -12.0, 140.0, -12.0, 140.0, 12.0, -140.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="FileLedge"]
+points = PackedVector2Array(-140.0, -12.0, 140.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object5" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2490, 620)
+kind = "policy"
+stable_id = "security_Object5"
+title = "规程控制台"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Enemy6" parent="." instance=ExtResource("e4")]
+position = Vector2(2080, 620)
+kind = "watcher"
+stable_id = "security_animal_6"
+
+[node name="Object7" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2890, 620)
+kind = "checkpoint"
+stable_id = "security_Object7"
+title = "安保门前休息"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false

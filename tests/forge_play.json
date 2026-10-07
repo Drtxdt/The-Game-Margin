@@ -1,0 +1,11 @@
+[
+ ["node", {"action":"set", "path":"RestoredLight", "props":{"color":[0.96,0.76,0.4,0.12]}}, "forge-node-edit"],
+ ["run", {"action":"play", "scene":"main", "timeout":30, "mute":true}, "first-play"],
+ ["view", {"action":"game"}, "title-screen"],
+ ["game", {"action":"set", "path":"/root/State", "props":{"save_path":"user://forge_qa.json"}}, "qa-save-isolation"],
+ ["game", {"action":"call", "path":"", "method":"begin", "args":[true]}, "start-test-journey"],
+ ["input", {"action":"send", "steps":[{"action":"right","hold":1.4},{"action":"jump","hold":0.25},{"wait":0.7}]}, "movement-input"],
+ ["game", {"action":"get", "path":"Player", "props":["position","velocity","is_on_floor"]}, "movement-result"],
+ ["view", {"action":"game"}, "gate-play"],
+ ["run", {"action":"errors"}, "first-runtime-errors"]
+]

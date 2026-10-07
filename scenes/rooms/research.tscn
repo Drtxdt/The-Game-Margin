@@ -1,0 +1,187 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="e2"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e3"]
+
+[ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="e4"]
+
+[ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
+
+[ext_resource type="Script" path="res://scripts/moving_platform.gd" id="e6"]
+
+[sub_resource type="RectangleShape2D" id="s1"]
+size = Vector2(3500, 120)
+
+[sub_resource type="RectangleShape2D" id="s2"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s3"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s4"]
+size = Vector2(160, 24)
+
+[node name="研究层前室" type="Node2D"]
+metadata/width = 3500
+metadata/room_id = "research"
+
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("e1")
+room_id = "research"
+width = 3500.0
+z_index = -10
+
+[node name="Floor0" type="StaticBody2D" parent="."]
+position = Vector2(1750.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor0"]
+shape = SubResource("s1")
+
+[node name="Surface" type="Polygon2D" parent="Floor0"]
+polygon = PackedVector2Array(-1750.0, -60.0, 1750.0, -60.0, 1750.0, 60.0, -1750.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Floor0"]
+points = PackedVector2Array(-1750.0, -60.0, 1750.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("s2")
+
+[node name="Surface" type="Polygon2D" parent="LeftWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="LeftWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(3520, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("s3")
+
+[node name="Surface" type="Polygon2D" parent="RightWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="RightWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object1" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(130, 620)
+kind = "exit"
+stable_id = "research_Object1"
+title = "钟庭"
+text = ""
+target = "bell"
+entry = Vector2(2560, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object1"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "钟庭"
+horizontal_alignment = 1
+
+[node name="Object2" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(3240, 620)
+kind = "exit"
+stable_id = "research_Object2"
+title = "档案井"
+text = ""
+target = "archive"
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object2"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "档案井"
+horizontal_alignment = 1
+
+[node name="Object3" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(860, 620)
+kind = "terminal"
+stable_id = "research_Object3"
+title = "读取 AX-17 终端"
+text = "现实锚 AX-17\n\n钟庭共振环仍在运行。\n当前场域：隔离。\n外部干预可能改变因果执行结果。\n\n最后一条记录：请保留未归档的观测。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Object4" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1900, 620)
+kind = "note"
+stable_id = "research_Object4"
+title = "根系与管线"
+text = "你抬头望去。\n管线穿过上方的楼板。那正是钟庭的位置。\n\n地面上的学校从没有和这里分开。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Observer" type="Node2D" parent="."]
+position = Vector2(1410, 310)
+script = ExtResource("e3")
+kind = "watcher"
+
+[node name="Enemy5" parent="." instance=ExtResource("e4")]
+position = Vector2(2420, 620)
+kind = "watcher"
+stable_id = "research_animal_5"
+
+[node name="LabLift" type="AnimatableBody2D" parent="." groups=["moving_platforms"]]
+position = Vector2(2770, 535)
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("e6")
+travel = Vector2(0, -145)
+period = 4.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LabLift"]
+shape = SubResource("s4")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="LabLift"]
+polygon = PackedVector2Array(-80.0, -12.0, 80.0, -12.0, 80.0, 12.0, -80.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="LabLift"]
+points = PackedVector2Array(-80.0, -12.0, 80.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)

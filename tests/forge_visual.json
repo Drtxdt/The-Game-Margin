@@ -1,0 +1,18 @@
+[
+ ["run", {"action":"stop"}, "stop-before-refresh"],
+ ["scene", {"action":"reload", "path":"res://scenes/rooms/library.tscn"}, "reload-library"],
+ ["run", {"action":"play", "scene":"main", "mute":true}, "refreshed-play"],
+ ["game", {"action":"set", "path":"/root/State", "props":{"save_path":"user://forge_visual_qa.json"}}, "visual-save-isolation"],
+ ["game", {"action":"call", "path":"", "method":"begin", "args":[true]}, "visual-new"],
+ ["game", {"action":"eval", "expression":"change_room('library', Vector2(790,580))"}, "visit-library"],
+ ["game", {"action":"wait", "seconds":1}, "library-settle"],
+ ["view", {"action":"game"}, "library-before"],
+ ["game", {"action":"call", "path":"/root/State", "method":"learn", "args":["archive"]}, "library-fixture-book"],
+ ["game", {"action":"call", "path":"/root/State", "method":"bind_books"}, "library-fixture-return"],
+ ["game", {"action":"call", "path":"/root/State", "method":"flag", "args":["boss_purified"]}, "library-fixture-guardian"],
+ ["game", {"action":"call", "path":"", "method":"update_library"}, "library-update"],
+ ["view", {"action":"game"}, "library-after"],
+ ["game", {"action":"call", "path":"UI", "method":"show_map"}, "map-open"],
+ ["view", {"action":"game"}, "map-screen"],
+ ["run", {"action":"errors"}, "visual-runtime-errors"]
+]

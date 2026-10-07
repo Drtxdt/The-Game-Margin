@@ -1,0 +1,316 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
+
+[ext_resource type="Script" path="res://scripts/interactable.gd" id="e2"]
+
+[ext_resource type="Script" path="res://scripts/actor_art.gd" id="e3"]
+
+[ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="e4"]
+
+[ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
+
+[sub_resource type="RectangleShape2D" id="s1"]
+size = Vector2(4000, 120)
+
+[sub_resource type="RectangleShape2D" id="s2"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s3"]
+size = Vector2(40, 1100)
+
+[sub_resource type="RectangleShape2D" id="s4"]
+size = Vector2(84, 16)
+
+[sub_resource type="RectangleShape2D" id="s5"]
+size = Vector2(84, 16)
+
+[sub_resource type="RectangleShape2D" id="s6"]
+size = Vector2(84, 16)
+
+[sub_resource type="RectangleShape2D" id="s7"]
+size = Vector2(240, 24)
+
+[node name="中央连廊" type="Node2D"]
+metadata/width = 4000
+metadata/room_id = "junction"
+
+[node name="Backdrop" type="Node2D" parent="."]
+script = ExtResource("e1")
+room_id = "junction"
+width = 4000.0
+z_index = -10
+
+[node name="Floor0" type="StaticBody2D" parent="."]
+position = Vector2(2000.0, 680)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor0"]
+shape = SubResource("s1")
+
+[node name="Surface" type="Polygon2D" parent="Floor0"]
+polygon = PackedVector2Array(-2000.0, -60.0, 2000.0, -60.0, 2000.0, 60.0, -2000.0, 60.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="Floor0"]
+points = PackedVector2Array(-2000.0, -60.0, 2000.0, -60.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+shape = SubResource("s2")
+
+[node name="Surface" type="Polygon2D" parent="LeftWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="LeftWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(4020, 230)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+shape = SubResource("s3")
+
+[node name="Surface" type="Polygon2D" parent="RightWall"]
+polygon = PackedVector2Array(-20.0, -550.0, 20.0, -550.0, 20.0, 550.0, -20.0, 550.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="RightWall"]
+points = PackedVector2Array(-20.0, -550.0, 20.0, -550.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object1" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(140, 620)
+kind = "exit"
+stable_id = "junction_Object1"
+title = "回声教室"
+text = ""
+target = "echo"
+entry = Vector2(2660, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object1"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "回声教室"
+horizontal_alignment = 1
+
+[node name="Object2" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1050, 620)
+kind = "exit"
+stable_id = "junction_Object2"
+title = "机电间"
+text = ""
+target = "machine"
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object2"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "机电间"
+horizontal_alignment = 1
+
+[node name="Object3" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1740, 620)
+kind = "exit"
+stable_id = "junction_Object3"
+title = "安保室"
+text = ""
+target = "security"
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object3"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "安保室"
+horizontal_alignment = 1
+
+[node name="Object4" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2510, 620)
+kind = "exit"
+stable_id = "junction_Object4"
+title = "维护通道"
+text = ""
+target = "maintenance"
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object4"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "维护通道"
+horizontal_alignment = 1
+
+[node name="Object5" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(560, 620)
+kind = "checkpoint"
+stable_id = "junction_Object5"
+title = "在连廊休息"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Object6" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(720, 620)
+kind = "anchor"
+stable_id = "junction_anchor"
+title = "因果锚点"
+text = ""
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Object7" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(3120, 620)
+kind = "note"
+stable_id = "junction_Object7"
+title = "建筑剖面"
+text = "钟庭的下方留出了一整层空白。\n图书馆下方，也有一条没有画完的竖线。"
+target = ""
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="WeightA" type="StaticBody2D" parent="." groups=["metal"]]
+position = Vector2(3300, 515)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeightA"]
+shape = SubResource("s4")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="WeightA"]
+polygon = PackedVector2Array(-42.0, -8.0, 42.0, -8.0, 42.0, 8.0, -42.0, 8.0)
+color = Color(0.64,0.59,0.43,1)
+
+[node name="Edge" type="Line2D" parent="WeightA"]
+points = PackedVector2Array(-42.0, -8.0, 42.0, -8.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="WeightB" type="StaticBody2D" parent="." groups=["metal"]]
+position = Vector2(3470, 355)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeightB"]
+shape = SubResource("s5")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="WeightB"]
+polygon = PackedVector2Array(-42.0, -8.0, 42.0, -8.0, 42.0, 8.0, -42.0, 8.0)
+color = Color(0.64,0.59,0.43,1)
+
+[node name="Edge" type="Line2D" parent="WeightB"]
+points = PackedVector2Array(-42.0, -8.0, 42.0, -8.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="WeightC" type="StaticBody2D" parent="." groups=["metal"]]
+position = Vector2(3650, 195)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WeightC"]
+shape = SubResource("s6")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="WeightC"]
+polygon = PackedVector2Array(-42.0, -8.0, 42.0, -8.0, 42.0, 8.0, -42.0, 8.0)
+color = Color(0.64,0.59,0.43,1)
+
+[node name="Edge" type="Line2D" parent="WeightC"]
+points = PackedVector2Array(-42.0, -8.0, 42.0, -8.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="HighLanding" type="StaticBody2D" parent="."]
+position = Vector2(3850, 35)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HighLanding"]
+shape = SubResource("s7")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="HighLanding"]
+polygon = PackedVector2Array(-120.0, -12.0, 120.0, -12.0, 120.0, 12.0, -120.0, 12.0)
+color = Color(0.34,0.46,0.43,1)
+
+[node name="Edge" type="Line2D" parent="HighLanding"]
+points = PackedVector2Array(-120.0, -12.0, 120.0, -12.0)
+width = 2.0
+default_color = Color(0.76,0.76,0.59,1)
+
+[node name="Object8" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(3850, 23)
+kind = "exit"
+stable_id = "junction_Object8"
+title = "上层通风口"
+text = ""
+target = "tower"
+entry = Vector2(150, 580)
+requirement = ""
+echo_allowed = false
+
+[node name="Sign" type="Label" parent="Object8"]
+offset_left = -85.0
+offset_top = -153.0
+offset_right = 85.0
+offset_bottom = -118.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
+text = "上层通风口"
+horizontal_alignment = 1

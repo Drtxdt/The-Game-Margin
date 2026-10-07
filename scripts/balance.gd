@@ -1,0 +1,22 @@
+class_name Balance
+extends RefCounted
+## Central playtest tuning. Frame counts assume the fixed 60 Hz physics tick.
+const MOVE_SPEED=280.0
+const JUMP_SPEED=-610.0
+const GRAVITY=1600.0
+const METAL_REBOUND=-770.0
+const ENEMY_REBOUND=-590.0
+const COYOTE_SECONDS=0.11
+const JUMP_BUFFER_SECONDS=0.12
+const DASH_SPEED=660.0
+const DASH_SECONDS=0.16
+const DASH_COOLDOWN=0.7
+const MAX_HEALTH=6
+const ORIGINAL_SANITY=100.0
+const MIN_SANITY_CAP=55.0
+const DEATH_SANITY_LOSS=5.0
+const ECHO_COST=12.0
+const ECHO_MAX_FRAMES=480
+const DEATH_VISIBLE_FRAMES=360
+const ENEMY_HEALTH=30
+const BOSS_HEALTH=180
