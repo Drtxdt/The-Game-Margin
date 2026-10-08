@@ -25,6 +25,10 @@ Godot 4.7.2 · GDScript · 2D Compatibility · 简体中文 · Windows 键盘版
 
 ## 本次可玩范围
 
+0.2 修复版加入可见书包、独立亡响标记和 v1 存档迁移。首次见库珀获赠录响器；累计第六次死亡后再见库珀，开启同一道具的缝页功能。书籍始终可免费取回，升级后才会返还该次死亡实际损失的理智上限，每笔只能回收一次。
+
+图书馆已改为正侧视分层场景，地面、家具和角色统一落点。首个回环增加旧馆登记簿、显示真实周期与到站时间的升降台，以及从教学走廊上层展开的永久楼梯。
+
 开场施救、折尺、数学与语言试读、图书馆归还和主修切换、真实输入残响、文理及维护路线、钟庭守兽、地下档案、回图书馆收束均已接入。支持提前取得档案的顺序。两条地图回环和额外路线保留，普通提示不揭露额外路线的位置。
 
 图书馆使用手绘背景、独立角色素材、灯光与音乐层次；其他房间是统一的占位关卡。当前角色动画仍以程序驱动的姿态、呼吸、位移和攻击提示为主，尚非完整逐帧手绘动画。
@@ -36,6 +40,7 @@ Godot 4.7.2 · GDScript · 2D Compatibility · 简体中文 · Windows 键盘版
 Windows 独立目录：`%APPDATA%\MarginDemo\`。
 
 - `journey.json`：版本化进度；`journey.json.bak`：最近有效备份。
+- 版本 1 首次载入时先保留 `journey.json.v1-backup`，再升级为版本 2；旧掉书记录进房时重新验证位置。无需重新开始游戏。
 - `settings.json`：音量、全屏、改键；不受语言知识影响。
 - QA 使用不同文件名，不替换正式旅程。正式程序不会读取旧工程存档。
 - 自动保存：拾书、归还、死亡、换主修、永久机关、净化守兽、房间切换、暂停及定时保存。
@@ -51,6 +56,6 @@ Windows 独立目录：`%APPDATA%\MarginDemo\`。
 
 脚本默认使用本机 Godot 路径，迁移机器时用 `-Godot` 参数覆盖。测试报告及截图在 `tests/output/`。Forge 往返测试在 `tests/forge_release_check.json`，可复用键盘场景在 `tests/scenarios/keyboard_smoke.json`。
 
-`tools/build_content.py` 是**显式运行的内容生成工具**，重新生成会覆盖房间、实体与 UI 场景。直接在编辑器修改场景后，不要无意重跑它；核心 GDScript 不会被它生成或覆盖。
+房间 `.tscn` 是内容的权威来源。`tools/build_content.py` 已停用执行入口，避免覆盖编辑器中的场景；`upgrade_*_v2.py` 和 `add_measure_crossing.py` 是本轮已执行的一次性迁移记录，不属于正常构建流程。
 
 更多细节：[架构](docs/ARCHITECTURE.md)、[工具链](docs/TOOLCHAIN.md)、[素材来源](docs/CREDITS.md)、[测试与验收](docs/VALIDATION.md)、[试玩记录](docs/PLAYTEST.md)。

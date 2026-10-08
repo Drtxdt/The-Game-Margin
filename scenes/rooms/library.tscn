@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
 
@@ -10,9 +10,16 @@
 
 [ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
 
-[ext_resource type="Texture2D" path="res://assets/art/library.png" id="e6"]
+[ext_resource type="Texture2D" path="res://assets/art/library_wall_cutout.png" id="e6"]
 
 [ext_resource type="Script" path="res://scripts/library_atmosphere.gd" id="e7"]
+
+[ext_resource type="Script" path="res://scripts/library_layers.gd" id="layers"]
+[ext_resource type="Script" path="res://scripts/furniture_art.gd" id="furniture"]
+[ext_resource type="Texture2D" path="res://assets/art/library_desk.png" id="desk"]
+[ext_resource type="Texture2D" path="res://assets/art/library_bench.png" id="bench"]
+
+[ext_resource type="Script" path="res://scripts/library_campus.gd" id="campus"]
 
 [sub_resource type="RectangleShape2D" id="s1"]
 size = Vector2(1920, 120)
@@ -90,8 +97,8 @@ default_color = Color(0.76,0.76,0.59,1)
 [node name="Painting" type="Sprite2D" parent="."]
 texture = ExtResource("e6")
 centered = false
-position = Vector2(0, -245)
-scale = Vector2(1.1483253588516746, 1.1477151965993624)
+position = Vector2(0, 60)
+scale = Vector2(0.8839779, 0.77348066)
 z_index = -8
 
 [node name="RestoredLight" type="Polygon2D" parent="."]
@@ -115,6 +122,7 @@ target = "hall"
 entry = Vector2(2300, 580)
 requirement = ""
 echo_allowed = false
+custom_art = true
 
 [node name="Sign" type="Label" parent="Object1"]
 offset_left = -85.0
@@ -138,6 +146,7 @@ target = "stacks"
 entry = Vector2(150, 580)
 requirement = ""
 echo_allowed = false
+custom_art = true
 
 [node name="Sign" type="Label" parent="Object2"]
 offset_left = -85.0
@@ -161,6 +170,7 @@ target = "echo"
 entry = Vector2(150, 580)
 requirement = ""
 echo_allowed = false
+custom_art = true
 
 [node name="Sign" type="Label" parent="Object3"]
 offset_left = -85.0
@@ -201,6 +211,7 @@ target = ""
 entry = Vector2(150, 580)
 requirement = ""
 echo_allowed = false
+custom_art = true
 
 [node name="Object6" type="Node2D" parent="."]
 script = ExtResource("e2")
@@ -213,6 +224,7 @@ target = ""
 entry = Vector2(150, 580)
 requirement = ""
 echo_allowed = false
+custom_art = true
 
 [node name="Object7" type="Node2D" parent="."]
 script = ExtResource("e2")
@@ -225,6 +237,7 @@ target = ""
 entry = Vector2(150, 580)
 requirement = ""
 echo_allowed = false
+custom_art = true
 
 [node name="GuardianHome" type="Node2D" parent="."]
 position = Vector2(750, 620)
@@ -232,3 +245,88 @@ script = ExtResource("e3")
 kind = "guardian"
 peaceful = true
 visible = false
+
+[node name="RecoveryAnchor" type="Marker2D" parent="."]
+position = Vector2(150, 623)
+
+[node name="GroundArt" type="Node2D" parent="."]
+script = ExtResource("layers")
+layer = "ground"
+z_index = -3
+
+[node name="RestoredShelves" type="Node2D" parent="."]
+script = ExtResource("layers")
+layer = "restoration"
+z_index = -5
+
+[node name="ForegroundPosts" type="Node2D" parent="."]
+script = ExtResource("layers")
+layer = "foreground"
+z_index = 4
+
+[node name="Furniture" type="Node2D" parent="Object1"]
+script = ExtResource("furniture")
+kind = "door"
+z_index = -1
+
+[node name="Furniture" type="Node2D" parent="Object2"]
+script = ExtResource("furniture")
+kind = "door"
+z_index = -1
+
+[node name="Furniture" type="Node2D" parent="Object3"]
+script = ExtResource("furniture")
+kind = "door"
+z_index = -1
+
+[node name="Furniture" type="Node2D" parent="Object5"]
+script = ExtResource("furniture")
+kind = "desk"
+z_index = -1
+
+[node name="Furniture" type="Node2D" parent="Object6"]
+script = ExtResource("furniture")
+kind = "desk"
+z_index = -1
+
+[node name="Furniture" type="Node2D" parent="Object7"]
+script = ExtResource("furniture")
+kind = "bench"
+z_index = -1
+
+[node name="Sign" type="Label" parent="Object5"]
+offset_left = -65.0
+offset_top = -105.0
+offset_right = 65.0
+offset_bottom = -80.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.82,0.78,0.65,1)
+text = "归还台"
+horizontal_alignment = 1
+
+[node name="Sign" type="Label" parent="Object6"]
+offset_left = -65.0
+offset_top = -105.0
+offset_right = 65.0
+offset_bottom = -80.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.82,0.78,0.65,1)
+text = "研习桌"
+horizontal_alignment = 1
+
+[node name="Sign" type="Label" parent="Object7"]
+offset_left = -65.0
+offset_top = -105.0
+offset_right = 65.0
+offset_bottom = -80.0
+theme_override_fonts/font = ExtResource("e5")
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.82,0.78,0.65,1)
+text = "休息长椅"
+horizontal_alignment = 1
+
+[node name="DistantCampus" type="Node2D" parent="."]
+script = ExtResource("campus")
+z_index = -9

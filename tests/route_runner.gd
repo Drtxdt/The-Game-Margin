@@ -62,6 +62,37 @@ func use(x: float, y: float=623) -> bool:
 	world.ui.close_all()
 	return true
 
+func cross_measure_lift() -> void:
+	if not await walk(1460): return
+	var lift=world.room.get_node("PeriodLift")
+	var boarded=false
+	var jumped=false
+	var jump_frame=-100
+	for i in range(600):
+		var p: Vector2=world.player.position
+		Input.action_release("left");Input.action_release("right")
+		if jumped and i-jump_frame>12 and world.player.is_on_floor() and p.y>610:
+			Input.action_release("jump")
+			jumped=false
+			await frames(3)
+			continue
+		if not jumped and lift.position.y>525 and world.player.is_on_floor():
+			Input.action_press("jump");jumped=true
+			jump_frame=i
+		if jumped:
+			if world.player.is_on_floor() and p.y<570:
+				boarded=true;break
+		await frames(1)
+	release()
+	if not boarded: print("BOARD_FAILED ",world.player.position," lift=",lift.position)
+	check(boarded,"moving lift boarded with real input")
+	if not boarded: return
+	for i in range(250):
+		await frames(1)
+		if world.player.is_on_floor() and world.player.position.y<502: break
+	check(await walk(1615,426),"lift reaches transfer landing")
+	check(await walk(1760,407),"counterweight housing crossed without knowledge gate")
+
 func door(x: float, expected: String, y: float=623) -> void:
 	var reached=await use(x,y)
 	check(reached and world.room_id==expected,"normal traversal enters "+expected)
@@ -90,6 +121,7 @@ func run() -> void:
 		await finish();return
 	if "--measure-check" in OS.get_cmdline_user_args():
 		world.change_room("measure",Vector2(150,580));await frames(20)
+		await cross_measure_lift()
 		check(await walk(1930,521),"measure first stair")
 		check(await walk(2090,436),"measure second stair")
 		check(await walk(2250,351),"measure third stair")
@@ -121,10 +153,13 @@ func run() -> void:
 	await use(920,435);check(state.knows("math"),"mathematics book reachable on shelf")
 	await use(2310);check(state.knows("language"),"language book reachable beyond gap")
 	await door(3340,"measure")
+	await cross_measure_lift()
 	await walk(1930,521);await walk(2090,436);await walk(2250,351)
 	await walk(2560,306);await walk(2840,271)
 	await door(3260,"hall",267)
 	if failed: await finish();return
+	await use(2170,321)
+	check(state.has_flag("hall_stairs_open"),"first loop opens permanent folding stairs")
 	await door(2410,"library")
 	await use(1010);check(state.data.held.is_empty() and "math" in state.data.bound,"first loop returns and binds books")
 	await door(1530,"echo")

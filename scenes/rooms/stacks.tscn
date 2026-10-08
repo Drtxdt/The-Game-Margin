@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
 
@@ -33,6 +33,9 @@ size = Vector2(120, 24)
 
 [sub_resource type="RectangleShape2D" id="s8"]
 size = Vector2(360, 24)
+
+[sub_resource type="RectangleShape2D" id="register_ledge"]
+size = Vector2(230, 20)
 
 [node name="旧书库" type="Node2D"]
 metadata/width = 3600
@@ -281,3 +284,27 @@ theme_override_font_sizes/font_size = 17
 theme_override_colors/font_color = Color(0.82,0.82,0.69,1)
 text = "档案井升降梯"
 horizontal_alignment = 1
+
+[node name="RecoveryAnchor" type="Marker2D" parent="."]
+position = Vector2(150, 623)
+
+[node name="RegisterLedge" type="StaticBody2D" parent="."]
+position = Vector2(1280, 336)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RegisterLedge"]
+shape = SubResource("register_ledge")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="RegisterLedge"]
+polygon = PackedVector2Array(-115,-10,115,-10,115,10,-115,10)
+color = Color(0.42,0.40,0.30,1)
+
+[node name="OldRegister" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1290, 326)
+kind = "note"
+stable_id = "stacks_old_register"
+title = "旧馆登记簿"
+text = "末页只有一行字：留一盏灯给最后回来的人。\n\n登记簿边缘有一枚沾着墨的爪印。下面压着一张旧照片：书架还没有这么空，窗外也还没有下雨。"

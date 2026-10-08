@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=21 format=3]
 
 [ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
 
@@ -47,6 +47,12 @@ size = Vector2(320, 24)
 
 [sub_resource type="RectangleShape2D" id="s12"]
 size = Vector2(180, 24)
+
+[sub_resource type="RectangleShape2D" id="housing_shape"]
+size = Vector2(120, 216)
+
+[sub_resource type="RectangleShape2D" id="transfer_shape"]
+size = Vector2(100, 20)
 
 [node name="测量廊" type="Node2D"]
 metadata/width = 3600
@@ -331,6 +337,52 @@ requirement = ""
 echo_allowed = false
 
 [node name="Enemy4" parent="." instance=ExtResource("e4")]
-position = Vector2(1710, 620)
+position = Vector2(1880, 620)
 kind = "watcher"
 stable_id = "measure_animal_4"
+
+[node name="RecoveryAnchor" type="Marker2D" parent="."]
+position = Vector2(150, 623)
+
+[node name="LiftManual" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(1300, 620)
+kind = "terminal"
+stable_id = "measure_lift_manual"
+title = "升降台维护牌"
+text = "PERIOD：一个完整往返的时间。\nTURNING POINT：改变方向的位置。\n\n平台越接近两端越慢。等它接近脚下，再起跳。\n观察时，刻度会跟随真实装置一起移动。"
+
+[node name="ObservationMark" type="Line2D" parent="."]
+points = PackedVector2Array(1225,619,1360,619)
+width = 4.0
+default_color = Color(0.77,0.71,0.48,1)
+
+[node name="CounterweightHousing" type="StaticBody2D" parent="."]
+position = Vector2(1760, 512)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CounterweightHousing"]
+shape = SubResource("housing_shape")
+
+[node name="Surface" type="Polygon2D" parent="CounterweightHousing"]
+polygon = PackedVector2Array(-60,-108,60,-108,60,108,-60,108)
+color = Color(0.29,0.39,0.36,1)
+
+[node name="Edge" type="Line2D" parent="CounterweightHousing"]
+points = PackedVector2Array(-60,-108,60,-108)
+width = 3.0
+default_color = Color(0.76,0.72,0.55,1)
+
+[node name="TransferLip" type="StaticBody2D" parent="."]
+position = Vector2(1615, 433)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TransferLip"]
+shape = SubResource("transfer_shape")
+one_way_collision = true
+
+[node name="Surface" type="Polygon2D" parent="TransferLip"]
+polygon = PackedVector2Array(-50,-10,50,-10,50,10,-50,10)
+color = Color(0.44,0.47,0.36,1)

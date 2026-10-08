@@ -24,6 +24,8 @@ var recent: Array = []
 var safe_position = Vector2(150,570)
 var last_frame: Dictionary = {}
 var world: Node
+var step_clock = 0.0
+var was_grounded = false
 
 func _ready() -> void:
 	world = get_tree().get_first_node_in_group("world")
@@ -61,6 +63,17 @@ func _physics_process(delta: float) -> void:
 	$Art.moving = minf(absf(velocity.x)/SPEED,1.0)
 	$Art.attacking = attack_left > 0
 	$Art.downward = down_attack
+	$Art.vertical_speed = velocity.y
+	$Art.grounded = is_on_floor()
+	$Art.hurt_pose = stagger>0
+	$Art.dashing = dash_left>0
+	if is_on_floor() and not was_grounded: $Art.landing = 0.13
+	was_grounded = is_on_floor()
+	if not is_ghost and is_on_floor() and absf(velocity.x)>40:
+		step_clock -= delta
+		if step_clock<=0:
+			world.sound("foot")
+			step_clock=0.32
 	if not is_ghost:
 		$Art.modulate.a = 0.45 if invulnerable > 0 and int(invulnerable*16)%2==0 else 1.0
 
@@ -136,4 +149,11 @@ func snapshot_reset(point: Vector2) -> void:
 	invulnerable = 1.0
 	attack_left = 0
 	dash_left = 0
+	dash_cooldown = 0
+	attack_cooldown = 0
+	stagger = 0
+	combo_window = 0
+	jump_buffer = 0
+	coyote = 0
+	step_clock = 0
 	recent.clear()

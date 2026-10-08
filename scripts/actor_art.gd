@@ -9,6 +9,11 @@ extends Node2D
 @export var echo: bool = false
 @export var downward: bool = false
 var phase = 0.0
+var vertical_speed = 0.0
+var grounded = true
+var hurt_pose = false
+var dashing = false
+var landing = 0.0
 var painted_dog: Texture2D
 var painted_student: Texture2D
 
@@ -19,6 +24,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	phase += delta * (10.0 if moving > 0.1 else 1.8)
+	landing=maxf(0,landing-delta)
 	queue_redraw()
 
 func _draw() -> void:
@@ -29,8 +35,20 @@ func _draw() -> void:
 		return
 	if kind=="student" and painted_student:
 		var bob=-absf(sin(phase))*moving*2
-		draw_set_transform(Vector2(0,bob),sin(phase)*moving*0.025,Vector2(facing,1))
-		draw_texture_rect_region(painted_student,Rect2(-12,-76,24,76),Rect2(270,10,450,1500),Color("a4e9d4") if echo else Color.WHITE)
+		var lean=0.30 if dashing else (-0.16 if hurt_pose else 0.07*moving)
+		if not grounded: lean=0.12 if vertical_speed<0 else -0.07
+		var squash=landing/0.13
+		var tint=Color("a4e9d4") if echo else Color.WHITE
+		# Two independently posed painted legs beneath a shared cutout torso.
+		for leg in range(2):
+			var hip=Vector2(-5 if leg==0 else 5,-25)
+			var angle=sin(phase+(PI if leg==0 else 0))*moving*0.45
+			if not grounded: angle=-0.35 if leg==0 else 0.32
+			draw_set_transform(Vector2(hip.x*facing,-25),angle*facing,Vector2(facing,1))
+			draw_texture_rect_region(painted_student,Rect2(-7,-1,12,26),Rect2(270+leg*225,1000,225,510),tint)
+		draw_set_transform(Vector2(0,-25+bob),lean*facing,Vector2(facing*(1+squash*0.08),1-squash*0.08))
+		draw_texture_rect_region(painted_student,Rect2(-12,-51,24,51),Rect2(270,10,450,990),tint)
+		draw_set_transform(Vector2(0,bob),lean*facing,Vector2(facing,1))
 		if attacking:
 			var end=Vector2(0,39) if downward else Vector2(91,-31)
 			draw_line(Vector2(8,-29),end,Color("d8ba78"),3,true)

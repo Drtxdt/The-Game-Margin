@@ -70,6 +70,7 @@ func run() -> void:
 	world.ui.close_all()
 	var loss=state.register_death("stacks",Vector2(450,620),[[450,620,1,false,false]])
 	check(not state.knows("math") and "math" in loss.books,"death drops trial book and removes temporary knowledge")
+	world.rebuild_recovery_points()
 	world.player.position=Vector2(450,620)
 	world.interact(world.player)
 	check(state.knows("math") and loss.books.is_empty(),"dropped book can be reclaimed")
@@ -99,6 +100,7 @@ func run() -> void:
 	check(state.has_flag("service_open"),"zero-echo maintenance route opens all three breakers")
 	# History is input, not position playback. Same recording, changed rope placement.
 	state.data.flags.ruler=true
+	state.data.echo_tool_level=1
 	state.data.san=55.0
 	await visit("echo",Vector2(1260,580))
 	await settle(30)

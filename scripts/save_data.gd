@@ -1,10 +1,10 @@
 class_name SaveData
 extends RefCounted
 
-const VERSION=1
+const VERSION=2
 
 static func fresh() -> Dictionary:
-	return {"version":VERSION,"flags":{},"bound":[],"held":[],"major":"physics","san_max":Balance.ORIGINAL_SANITY,"san":Balance.ORIGINAL_SANITY,"hp":Balance.MAX_HEALTH,"checkpoint":"gate","checkpoint_pos":[150.0,570.0],"visited":[],"echoes":{},"deaths":[],"seconds":0.0,"notes":[],"completed":false}
+	return {"version":VERSION,"flags":{},"bound":[],"held":[],"major":"physics","san_max":Balance.ORIGINAL_SANITY,"san":Balance.ORIGINAL_SANITY,"hp":Balance.MAX_HEALTH,"checkpoint":"gate","checkpoint_pos":[150.0,570.0],"visited":[],"echoes":{},"deaths":[],"seconds":0.0,"notes":[],"completed":false,"total_deaths":0,"echo_tool_level":0,"discovered_exits":[],"checkpoints":[]}
 
 static func number(value: Variant) -> bool:
 	return (value is float or value is int) and is_finite(float(value))

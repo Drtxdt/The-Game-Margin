@@ -54,6 +54,7 @@ func _physics_process(delta: float) -> void:
 			var pattern = ["charge","leap","sweep","roar"]
 			attack_kind = pattern[sequence%4] if kind=="boss" else kind
 			sequence += 1
+			world.sound("warning")
 			if kind=="charger" and State.data.san_max<=80 and sequence%3==0:
 				feint=true
 	elif mode=="tell":
@@ -111,6 +112,17 @@ func _physics_process(delta: float) -> void:
 
 func _draw() -> void:
 	if mode=="tell" and not purified:
+		var amber=Color(0.88,0.67,0.40,0.55)
+		if kind=="charger" or (kind=="boss" and attack_kind=="charge"):
+			draw_dashed_line(Vector2(0,-3),Vector2(facing*(250 if kind=="boss" else 150),-3),amber,2,8,true)
+		elif kind=="flier" or (kind=="boss" and attack_kind=="leap"):
+			draw_arc(Vector2(facing*65,-65),70,PI,TAU,24,amber,2,true)
+		elif kind=="watcher" or (kind=="boss" and attack_kind=="roar"):
+			var reach=270 if kind=="boss" else 210
+			draw_line(Vector2(-reach,-3),Vector2(reach,-3),amber,3,true)
+			for x in [-reach,reach]: draw_line(Vector2(x,-3),Vector2(x,-18),amber,2,true)
+		elif kind=="boss" and attack_kind=="sweep":
+			draw_arc(Vector2.ZERO,95,PI,TAU,32,amber,3,true)
 		var height = -205 if kind=="boss" else -84
 		draw_line(Vector2(-9,height-12),Vector2(0,height+6),Color("e6b87c"),4,true)
 		draw_line(Vector2(0,height+6),Vector2(9,height-12),Color("e6b87c"),4,true)

@@ -36,6 +36,9 @@ func knows(book: String) -> bool:
 	return book in data.bound or book in data.held
 
 func learn(book: String) -> void:
+	if book not in RoomCatalog.BOOK_NAMES: return
+	for death in data.deaths:
+		if book in death.books: return
 	if not knows(book):
 		data.held.append(book)
 		save_game()
@@ -71,15 +74,90 @@ func register_death(room_id: String, point: Vector2, poses: Array) -> Dictionary
 	var old: float = data.san_max
 	data.san_max = maxf(Balance.MIN_SANITY_CAP, old - Balance.DEATH_SANITY_LOSS)
 	var death = DeathImprint.create(room_id, point, poses, old - float(data.san_max), data.held)
+	data.total_deaths += 1
+	death.id = "death_%d" % int(data.total_deaths)
+	death.recovery_anchor_id = room_id + "_safe_ground"
 	data.deaths.append(death)
 	data.held.clear()
 	restore()
 	save_game()
 	return death
 
-func validate_save(value: Variant) -> bool:
-	if not value is Dictionary or value.get("version", 0) != SAVE_VERSION:
+func meet_librarian() -> String:
+	var message = ""
+	if int(data.echo_tool_level) == 0 or has_flag("tool_gift_pending"):
+		data.echo_tool_level = maxi(1, int(data.echo_tool_level))
+		data.flags.erase("tool_gift_pending")
+		message = "库珀从登记台下推来一个旧盒子。\n“录响器。它能留下你做过的动作。”\n\n在因果锚点旁按 %s 录制，按 %s 调用。每次调用消耗 12 点当前理智。" % [key_name("record"), key_name("replay")]
+	if int(data.total_deaths) >= 6 and int(data.echo_tool_level) < 2:
+		data.echo_tool_level = 2
+		message += ("\n\n" if message != "" else "") + "库珀看着你身后的空处，打开了盒子里另一道扣。\n“有些落下的自己，现在可以带回来了。”\n\n录响器已开启缝页功能：走到亡响的固定标记旁，按 %s 回收失去的理智上限。" % key_name("interact")
+	if message != "":
+		save_game()
+		changed.emit()
+	return message
+
+func collect_deaths(ids: Array) -> Dictionary:
+	# Book ownership and debt settlement are committed together once per interaction.
+	var before = data.duplicate(true)
+	var books: Array = []
+	var debt = 0.0
+	var settled = 0
+	for death in data.deaths:
+		if death.id not in ids: continue
+		for book in death.books:
+			if not knows(book):
+				data.held.append(book)
+				books.append(book)
+		death.books.clear()
+		if int(data.echo_tool_level) >= 2 and not death.recovered:
+			debt += float(death.debt)
+			death.recovered = true
+			settled += 1
+	data.san_max = minf(100.0, float(data.san_max) + debt)
+	data.san = minf(float(data.san_max), float(data.san) + debt)
+	if not save_game():
+		data = before
+		return {"ok":false,"books":[],"debt":0.0,"settled":0}
+	changed.emit()
+	return {"ok":true,"books":books,"debt":debt,"settled":settled}
+
+func migrate_save(value: Dictionary) -> Dictionary:
+	var result = value.duplicate(true)
+	result.version = SAVE_VERSION
+	result.total_deaths = result.deaths.size()
+	result.echo_tool_level = 1 if "library" in result.visited else 0
+	result.discovered_exits = []
+	result.checkpoints = [result.checkpoint]
+	if result.echo_tool_level == 1: result.flags.tool_gift_pending = true
+	var owned: Array = []
+	for key in ["bound", "held"]:
+		var unique: Array = []
+		for book in result[key]:
+			if book not in owned:
+				owned.append(book)
+				unique.append(book)
+		result[key] = unique
+	for index in range(result.deaths.size()):
+		var death: Dictionary = result.deaths[index]
+		death.id = "death_%d" % (index + 1)
+		death.recovered = bool(death.get("recovered", false))
+		death.recovery_anchor_id = "legacy_revalidate"
+		var unique: Array = []
+		for book in death.books:
+			if book not in owned:
+				owned.append(book)
+				unique.append(book)
+		death.books = unique
+	return result
+
+func validate_save(value: Variant, legacy: bool = false) -> bool:
+	if not value is Dictionary or value.get("version", 0) != (1 if legacy else SAVE_VERSION):
 		return false
+	if not legacy:
+		if not SaveData.number(value.get("total_deaths")) or value.total_deaths < 0 or value.total_deaths != int(value.total_deaths): return false
+		if not SaveData.number(value.get("echo_tool_level")) or value.echo_tool_level < 0 or value.echo_tool_level > 2 or value.echo_tool_level != int(value.echo_tool_level): return false
+		if not value.get("discovered_exits") is Array or not value.get("checkpoints") is Array: return false
 	for key in ["flags", "echoes"]:
 		if not value.get(key) is Dictionary:
 			return false
@@ -113,6 +191,8 @@ func validate_save(value: Variant) -> bool:
 			return false
 		if not SaveData.pair(death.point) or not SaveData.number(death.get("debt")) or not death.get("id") is String:
 			return false
+		if death.debt < 0 or death.debt > Balance.DEATH_SANITY_LOSS: return false
+		if not legacy and (not death.get("recovered") is bool or not death.get("recovery_anchor_id") is String): return false
 		for book in death.books:
 			if book not in RoomCatalog.BOOK_NAMES: return false
 		for pose in death.poses:
@@ -120,6 +200,19 @@ func validate_save(value: Variant) -> bool:
 			if not SaveData.number(pose[0]) or not SaveData.number(pose[1]) or not SaveData.number(pose[2]): return false
 	for clip in value.echoes.values():
 		if not clip is Dictionary or not EchoClip.valid(clip): return false
+	if not legacy:
+		var owned: Array=[]
+		for book in value.bound+value.held:
+			if book in owned: return false
+			owned.append(book)
+		var ids: Array=[]
+		for death in value.deaths:
+			if death.id in ids: return false
+			ids.append(death.id)
+			for book in death.books:
+				if book in owned: return false
+				owned.append(book)
+		if value.total_deaths < value.deaths.size(): return false
 	return value.get("checkpoint", "") in RoomCatalog.ROOMS
 
 func read_json(path: String) -> Variant:
@@ -133,6 +226,14 @@ func load_game() -> bool:
 		if not FileAccess.file_exists(path):
 			continue
 		var parsed = read_json(path)
+		if validate_save(parsed, true):
+			var backup = save_path + ".v1-backup"
+			if not FileAccess.file_exists(backup):
+				if DirAccess.copy_absolute(ProjectSettings.globalize_path(path), ProjectSettings.globalize_path(backup)) != OK:
+					load_note = "旧旅程备份失败，请检查存档目录权限。"
+					return false
+			parsed = migrate_save(parsed)
+			load_note = "旧旅程已升级，书籍和往日的亡响仍在。"
 		if validate_save(parsed):
 			data.merge(parsed, true)
 			if path.ends_with(".bak"):
@@ -141,6 +242,9 @@ func load_game() -> bool:
 	return false
 
 func save_game() -> bool:
+	if not validate_save(data):
+		push_error("Refusing to replace a save with invalid journey state")
+		return false
 	var temporary = save_path + ".tmp"
 	var f = FileAccess.open(temporary, FileAccess.WRITE)
 	if f == null:

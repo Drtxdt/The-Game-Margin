@@ -8,7 +8,7 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 $env:GODOT_FORGE_NO_SERVER = '1'
 & $Godot --headless --editor --path $projectRoot --import --quit
 if ($LASTEXITCODE -ne 0) { throw 'Godot import failed.' }
-foreach ($runner in @('qa_runner', 'traversal_runner')) {
+foreach ($runner in @('qa_runner', 'traversal_runner', 'recovery_runner', 'combat_runner', 'loop_runner')) {
     & $Godot --headless --path $projectRoot --script "res://tests/$runner.gd"
     if ($LASTEXITCODE -ne 0) { throw "$runner failed." }
 }

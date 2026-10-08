@@ -349,8 +349,4 @@ def main_scene():
     sc.save('scenes/main.tscn')
 
 if __name__=='__main__':
-    write('assets/icon.svg','<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="128" height="128" rx="20" fill="#213f43"/><path d="M25 28Q45 20 64 32Q85 20 103 28V96Q84 88 64 102Q44 88 25 96Z" fill="#d6c99e"/><path d="M64 32V101M35 44L53 43M35 58L53 58M75 43L92 44M75 58L92 58" stroke="#35594f" stroke-width="3"/></svg>')
-    make_entities();theme()
-    for rid,(name,width) in ROOMS.items(): make_room(rid,name,width)
-    ui_scene();audio();main_scene()
-    print('Generated 16 editable room scenes, entities, UI, and original audio.')
+    raise SystemExit('Archived prototype generator: edit the Godot scenes directly. This tool no longer overwrites polished content.')

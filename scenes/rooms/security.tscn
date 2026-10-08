@@ -262,3 +262,6 @@ target = ""
 entry = Vector2(150, 580)
 requirement = ""
 echo_allowed = false
+
+[node name="RecoveryAnchor" type="Marker2D" parent="."]
+position = Vector2(150, 623)

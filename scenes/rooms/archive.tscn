@@ -275,3 +275,6 @@ stable_id = "archive_animal_6"
 position = Vector2(2950, 390)
 kind = "flier"
 stable_id = "archive_animal_7"
+
+[node name="RecoveryAnchor" type="Marker2D" parent="."]
+position = Vector2(150, 623)

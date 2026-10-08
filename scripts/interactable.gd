@@ -9,11 +9,13 @@ extends Node2D
 @export var entry = Vector2(150,580)
 @export var requirement = ""
 @export var echo_allowed = false
+@export var custom_art = false
 var pulse = 0.0
 
 func _ready() -> void:
 	if not Engine.is_editor_hint():
 		add_to_group("interactables")
+		_process(0)
 
 func _process(delta: float) -> void:
 	pulse += delta
@@ -35,6 +37,7 @@ func dropped_elsewhere() -> bool:
 	return false
 
 func _draw() -> void:
+	if custom_art: return
 	var light = Color("d6bc86")
 	var jade = Color("8fb8aa")
 	var ink = Color("203c43")

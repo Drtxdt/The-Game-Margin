@@ -208,3 +208,6 @@ echo_allowed = false
 position = Vector2(1980, 340)
 kind = "flier"
 stable_id = "tower_animal_4"
+
+[node name="RecoveryAnchor" type="Marker2D" parent="."]
+position = Vector2(150, 623)

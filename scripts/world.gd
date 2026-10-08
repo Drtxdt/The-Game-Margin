@@ -2,6 +2,8 @@ extends Node2D
 
 const PLAYER_SCENE = preload("res://scenes/entities/player.tscn")
 const DEATH_SCENE = preload("res://scenes/entities/death.tscn")
+const RECOVERY_SCENE = preload("res://scenes/entities/recovery_point.tscn")
+const LIBRARY_SCENE = preload("res://scenes/rooms/library.tscn")
 @onready var player = $Player
 @onready var ui = $UI
 var room: Node2D
@@ -28,7 +30,7 @@ func _ready() -> void:
 	if not get_tree().has_meta("margin_test_started"):
 		for argument in OS.get_cmdline_user_args():
 			if argument.begins_with("--self-test="):
-				var runners={"integration":"qa_runner","traversal":"traversal_runner","routes":"route_runner","render":"render_runner"}
+				var runners={"integration":"qa_runner","traversal":"traversal_runner","routes":"route_runner","render":"render_runner","recovery":"recovery_runner","combat":"combat_runner","loop":"loop_runner","visual":"visual_audit"}
 				var name=argument.trim_prefix("--self-test=")
 				if runners.has(name):
 					get_tree().set_meta("margin_test_started",true)
@@ -36,7 +38,7 @@ func _ready() -> void:
 					return
 	$Music.finished.connect($Music.play)
 	$MusicWarm.finished.connect($MusicWarm.play)
-	for sound_id in ["jump","strike","hurt","dash","bell","page","warning"]:
+	for sound_id in ["jump","strike","hurt","dash","bell","page","warning","foot","collect","impact"]:
 		sfx[sound_id] = load("res://assets/audio/%s.wav" % sound_id)
 	_load_room(str(State.data.checkpoint),Vector2(float(State.data.checkpoint_pos[0]),float(State.data.checkpoint_pos[1])))
 	if "--qa" in OS.get_cmdline_user_args():
@@ -95,20 +97,29 @@ func _process(delta: float) -> void:
 	else:
 		$MusicWarm.volume_db=move_toward($MusicWarm.volume_db,-50,delta*16)
 	queue_redraw()
+	for item in get_tree().get_nodes_in_group("interactables"):
+		if item.kind == "exit" and item.position.distance_to(player.position) < 240 and item.stable_id not in State.data.discovered_exits:
+			State.data.discovered_exits.append(item.stable_id)
 
-func _draw() -> void:
+func draw_overlay(canvas: Node2D) -> void:
 	if not playing or not is_instance_valid(player):
 		return
 	if observing and State.knows("math") and is_instance_valid(room):
 		for platform in get_tree().get_nodes_in_group("moving_platforms"):
 			var p: Vector2=platform.position
-			draw_line(p,p+Vector2(0,-160),Color(0.7,0.88,0.73,0.65),1,true)
-			draw_circle(p+Vector2(0,-160),5,Color("bad7b2"),false,1,true)
-			draw_string(ui.font,p+Vector2(20,-55),"周期 %.1f 秒 · 距离 %.1f 格" % [platform.period,player.position.distance_to(p)/64.0],HORIZONTAL_ALIGNMENT_LEFT,-1,18,Color("c7dec2"))
+			var info: Dictionary=platform.observation()
+			canvas.draw_dashed_line(info.origin,info.end,Color(0.7,0.88,0.73,0.65),2,6,true)
+			for end in [info.origin,info.end]: canvas.draw_circle(end,5,Color("bad7b2"),false,1,true)
+			var label=p+Vector2(105,-110)
+			canvas.draw_rect(Rect2(label-Vector2(8,22),Vector2(274,77)),Color(0.05,0.12,0.13,0.88))
+			canvas.draw_string(ui.font,label,"周期 %.1f 秒 · 距离 %.1f 格" % [info.period,player.position.distance_to(p)/64.0],HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("c7dec2"))
+			canvas.draw_string(ui.font,label+Vector2(0,24),"%s · %.1f 秒后到站" % ["上行" if info.outbound else "下行",info.next_stop],HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("e4c893"))
+			canvas.draw_line(label+Vector2(0,39),label+Vector2(246,39),Color("405f5a"),3)
+			canvas.draw_circle(label+Vector2(info.progress*246,39),4,Color("c7dec2"))
 			var rise=Balance.JUMP_SPEED*Balance.JUMP_SPEED/(2.0*Balance.GRAVITY)
-			draw_dashed_line(player.position+Vector2(-32,-rise),player.position+Vector2(50,-rise),Color(0.7,0.88,0.73,0.6),1,5)
+			canvas.draw_dashed_line(player.position+Vector2(-32,-rise),player.position+Vector2(50,-rise),Color(0.7,0.88,0.73,0.6),1,5)
 	if recording:
-		draw_arc(player.position+Vector2(0,-35),51,-PI/2,-PI/2+TAU*clip.frames.size()/480.0,40,Color("b6e4cc"),2,true)
+		canvas.draw_arc(player.position+Vector2(0,-35),51,-PI/2,-PI/2+TAU*clip.frames.size()/480.0,40,Color("b6e4cc"),2,true)
 
 func change_room(id: String, point: Vector2 = Vector2(150,580)) -> void:
 	if transitioning or not RoomCatalog.ROOMS.has(id):
@@ -124,7 +135,8 @@ func _load_room(id: String, point: Vector2) -> void:
 		remove_child(room)
 		room.queue_free()
 	room_id=id
-	room=load("res://scenes/rooms/%s.tscn" % id).instantiate()
+	# Warm the illustrated hub before gameplay, avoiding its first-visit texture load hitch.
+	room=(LIBRARY_SCENE if id=="library" else load("res://scenes/rooms/%s.tscn" % id)).instantiate()
 	add_child(room)
 	move_child(room,0)
 	room_width=float(room.get_meta("width",3200))
@@ -133,21 +145,14 @@ func _load_room(id: String, point: Vector2) -> void:
 	camera.limit_left=0
 	camera.limit_right=int(room_width)
 	camera.limit_top=-340 if id in ["junction","tower"] else 0
-	camera.limit_bottom=720
-	camera.reset_smoothing()
+	camera.limit_bottom=820
+	camera.reset_for_room()
 	if id not in State.data.visited:
 		State.data.visited.append(id)
 	ui.room_changed(id)
 	rope=room.get_node_or_null("Rope")
 	trolley=room.get_node_or_null("Trolley")
-	var deaths: Array=[]
-	for death in State.data.deaths:
-		if death.room==id:
-			deaths.append(death)
-	for death in deaths.slice(maxi(0,deaths.size()-3)):
-		var visual=DEATH_SCENE.instantiate()
-		visual.poses=death.poses
-		room.add_child(visual)
+	rebuild_recovery_points()
 	if id=="bell" and not State.has_flag("boss_purified"):
 		State.data.checkpoint="bell"
 		State.data.checkpoint_pos=[310,580]
@@ -157,7 +162,9 @@ func _load_room(id: String, point: Vector2) -> void:
 		State.data.checkpoint_pos=[240,580]
 		State.restore()
 		update_library()
-		if "archive" in State.data.bound and State.has_flag("boss_purified") and not State.data.completed:
+		var gift = State.meet_librarian() if playing else ""
+		if gift != "": ui.dialogue("馆长 · 库珀", gift)
+		if playing and "archive" in State.data.bound and State.has_flag("boss_purified") and not State.data.completed:
 			State.data.completed=true
 			ui.dialogue("余页", "灯亮起来以后，图书馆不再只有你们两个。\n\n守兽蜷在门边，库珀给它留出了位置。你带回来的那一页，在书架上慢慢展开。\n\n外面仍然有许多没有走过的路。\n但现在，你知道自己可以回来。", "complete")
 	if id=="research" and not State.has_flag("boss_purified") and not State.has_flag("sequence_break"):
@@ -169,13 +176,52 @@ func _load_room(id: String, point: Vector2) -> void:
 	State.save_game()
 	transitioning=false
 
+func rebuild_recovery_points() -> void:
+	for node in get_tree().get_nodes_in_group("recovery_points"):
+		node.remove_from_group("interactables")
+		room.remove_child(node)
+		node.queue_free()
+	for node in get_tree().get_nodes_in_group("death_visuals"):
+		node.get_parent().remove_child(node)
+		node.queue_free()
+	var unresolved: Array = []
+	var points: Array = []
+	for death in State.data.deaths:
+		if death.room != room_id: continue
+		var point = Vector2(death.point[0],death.point[1])
+		if not safe_ground(point): point = recovery_fallback()
+		death.point = [point.x,point.y]
+		death.recovery_anchor_id = room_id + "_safe_ground"
+		if death.recovered and death.books.is_empty(): continue
+		var marker: Node = null
+		for existing in points:
+			if existing.position.distance_to(point) < 48: marker = existing
+		if marker == null:
+			marker = RECOVERY_SCENE.instantiate()
+			marker.position = point
+			marker.stable_id = "recovery_" + death.id
+			points.append(marker)
+		marker.records.append(death)
+		if not death.recovered: unresolved.append(death)
+	for marker in points: room.add_child(marker)
+	for death in unresolved.slice(maxi(0,unresolved.size()-3)):
+		var visual = DEATH_SCENE.instantiate()
+		visual.poses = death.poses
+		visual.record = death
+		visual.add_to_group("death_visuals")
+		room.add_child(visual)
+
+func recovery_fallback() -> Vector2:
+	var anchor = room.get_node_or_null("RecoveryAnchor")
+	return anchor.position if anchor else Vector2(310 if room_id=="bell" else 150,623)
+
 func update_library() -> void:
 	if room_id!="library":
 		return
 	var restored="archive" in State.data.bound
 	var painting=room.get_node_or_null("Painting")
 	if painting:
-		painting.modulate=Color.WHITE if restored else Color(0.62,0.72,0.78)
+		painting.modulate=Color(0.85,0.90,0.86) if restored else Color(0.55,0.67,0.71)
 	var lamps=room.get_node_or_null("RestoredLight")
 	if lamps:
 		lamps.visible=restored
@@ -198,16 +244,6 @@ func nearest_interactable(actor: Node) -> Node:
 func interact(actor: Node) -> void:
 	if transitioning:
 		return
-	if not actor.is_ghost:
-		for death in State.data.deaths:
-			if death.room==room_id and not death.books.is_empty() and actor.position.distance_to(Vector2(death.point[0],death.point[1]))<100:
-				for book in death.books:
-					if not State.knows(book):
-						State.data.held.append(book)
-				death.books.clear()
-				State.save_game()
-				ui.toast("找回了未归还的书。亡响仍留在这里。")
-				return
 	var item=nearest_interactable(actor)
 	if item==null:
 		return
@@ -216,6 +252,16 @@ func interact(actor: Node) -> void:
 			ui.toast(item.text if item.text!="" else "这条路还没有打开。")
 		return
 	match item.kind:
+		"recovery":
+			var result = item.collect()
+			if not result.ok:
+				rebuild_recovery_points.call_deferred()
+				ui.toast("保存未完成，书页仍留在这里。请检查存档目录。")
+			elif result.books.is_empty() and result.settled == 0:
+				ui.toast("书籍始终可以取回。录响器现在还不能缝合亡响。")
+			else:
+				sound("collect")
+				ui.toast("取回 %d 本书 · 缝合 %d 份亡响 · 理智上限 +%d" % [result.books.size(),result.settled,int(result.debt)],5)
 		"exit":
 			change_room(item.target,item.entry)
 		"cooper":
@@ -223,7 +269,8 @@ func interact(actor: Node) -> void:
 				State.flag("cooper_rescued")
 				ui.dialogue("校门外", "你抬起倾倒的架子，把最后一点面包放在它面前。\n\n狗没有立刻吃。它先看了看钟，又看了看你。\n\n学校里，铃声已经停了。")
 			else:
-				ui.dialogue("库珀", "“把书放回它原来的位置。”\n\n“你问我为什么会说话？”\n\n它把面包屑往爪子下面拨了拨。\n“先解决比较重要的问题。”")
+				var gift = State.meet_librarian()
+				ui.dialogue("库珀", gift if gift != "" else "“把书放回它原来的位置。”\n\n“你问我为什么会说话？”\n\n它把面包屑往爪子下面拨了拨。\n“先解决比较重要的问题。”")
 		"ruler":
 			State.flag("ruler")
 			ui.dialogue("老式金属折尺", "折叠，展开，锁定。\n\n按 %s 挥尺。跳起后按住 %s 再挥尺，可以向下敲击。\n有些坚硬的表面，会把力还给你。" % [State.key_name("attack"),State.key_name("down")])
@@ -246,6 +293,7 @@ func interact(actor: Node) -> void:
 		"major":
 			ui.dialogue("选择主修", "数学帮助你看见关系，语言帮助你读懂信息。\n\n物理：在机电间调整支点，改变通路。\n政治：在安保室利用疏散规则的优先级。\n\n随时可回这里免费更换；已打开的道路保留。", "major")
 		"checkpoint":
+			if room_id not in State.data.checkpoints: State.data.checkpoints.append(room_id)
 			State.data.checkpoint=room_id
 			State.data.checkpoint_pos=[item.position.x,item.position.y-20]
 			State.restore()
@@ -276,6 +324,9 @@ func interact(actor: Node) -> void:
 				ui.toast("三个手动断路器已复位。钟庭维护门打开了。")
 		"bell":
 			ring_bell(item.position)
+		"shortcut":
+			State.flag(item.stable_id)
+			ui.toast("折叠楼梯已经展开。下次可以直接回到这里。",5)
 		"terminal":
 			ui.dialogue(item.title,item.text if State.knows("language") else "AX-17 / ██ ██\nCONTAINMENT ███\n\n角色暂时无法完整理解这些文字。")
 		_:
@@ -285,6 +336,9 @@ func interact(actor: Node) -> void:
 			ui.dialogue(item.title,item.text)
 
 func begin_recording() -> bool:
+	if State.data.echo_tool_level < 1:
+		ui.toast("还没有能留下动作的工具。图书馆里也许有人知道。")
+		return false
 	var anchor: Node=null
 	for item in get_tree().get_nodes_in_group("interactables"):
 		if item.kind=="anchor" and player.position.distance_to(item.position)<110:
@@ -320,6 +374,9 @@ func finish_recording() -> void:
 		ui.toast("动作已留下 · %.1f 秒 · %s 调用" % [clip.frames.size()/60.0,State.key_name("replay")])
 
 func play_echo() -> bool:
+	if State.data.echo_tool_level < 1:
+		ui.toast("需要先获得录响器。")
+		return false
 	if recording:
 		finish_recording()
 	var selected: Dictionary={}
@@ -376,6 +433,7 @@ func resolve_strike(actor: Node, down: bool, damage: int) -> void:
 		if hit_rect.intersects(target_rect):
 			actor.hits.append(enemy.get_instance_id())
 			enemy.hit(damage,actor)
+			sound("impact")
 			if down:
 				actor.velocity.y=Balance.ENEMY_REBOUND
 				actor.attack_left=0
@@ -401,13 +459,34 @@ func resolve_strike(actor: Node, down: bool, damage: int) -> void:
 				sound("bell")
 
 func safe_ground(point: Vector2) -> bool:
-	return point.x>40 and point.x<room_width-40 and point.y<680
+	# Only authored ground floors qualify, never moving or ability-dependent ledges.
+	if room_id == "bell" and point.x > 550: return false
+	for floor_node in room.get_children():
+		if not floor_node is StaticBody2D or not str(floor_node.name).begins_with("Floor"): continue
+		var collision = floor_node.get_node_or_null("CollisionShape2D")
+		if collision == null or not collision.shape is RectangleShape2D: continue
+		var half: Vector2 = collision.shape.size / 2.0
+		var center: Vector2 = floor_node.position + collision.position
+		if absf(point.y - (center.y-half.y+3)) > 8: continue
+		if point.x > center.x-half.x+40 and point.x < center.x+half.x-40: return drop_has_clearance(point)
+	return false
+
+func drop_has_clearance(point: Vector2) -> bool:
+	var body=Rect2(point+Vector2(-16,-72),Vector2(32,68))
+	for collision in room.find_children("*","CollisionShape2D",true,false):
+		var owner_node=collision.get_parent()
+		if not owner_node is StaticBody2D or str(owner_node.name).begins_with("Floor"): continue
+		if collision.disabled or collision.one_way_collision or not collision.shape is RectangleShape2D: continue
+		var rect=Rect2(collision.global_position-collision.shape.size/2.0,collision.shape.size)
+		if body.intersects(rect): return false
+	return true
 
 func die() -> void:
 	if transitioning:
 		return
 	finish_recording()
-	State.register_death(room_id,player.safe_position,player.recent)
+	var point: Vector2 = player.safe_position if safe_ground(player.safe_position) else recovery_fallback()
+	State.register_death(room_id,point,player.recent)
 	ui.toast("一部分自己留在了这里。理智上限 %d / 100" % int(State.data.san_max),5)
 	change_room(str(State.data.checkpoint),Vector2(State.data.checkpoint_pos[0],State.data.checkpoint_pos[1]))
 
@@ -433,13 +512,14 @@ func ring_bell(point: Vector2) -> void:
 			enemy.hear(point)
 
 func sound(id: String) -> void:
+	if not sfx.has(id): return
 	var now=Time.get_ticks_msec()
 	if now-int(last_sound.get(id,0))<90:
 		return
 	last_sound[id]=now
 	var audio=AudioStreamPlayer.new()
 	audio.stream=sfx.get(id)
-	audio.volume_db=-15
+	audio.volume_db=-23 if id=="foot" else -15
 	add_child(audio)
 	audio.finished.connect(audio.queue_free)
 	audio.play()

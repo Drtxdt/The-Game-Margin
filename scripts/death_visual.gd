@@ -1,8 +1,12 @@
 extends Node2D
 var poses: Array = []
 var clock = 0.0
+var record: Dictionary = {}
 
 func _process(delta: float) -> void:
+	if not record.is_empty() and record.get("recovered",false):
+		queue_free()
+		return
 	if poses.is_empty():
 		return
 	clock += delta

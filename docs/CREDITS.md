@@ -17,6 +17,22 @@ AI 生成角色目前为静态手绘 cutout 配合程序动画；尚未提供完
 
 ## 字体
 
+### 0.2 侧视图书馆新增图像
+
+以下均由内置 imagegen 生成，保留可导入的 PNG；未借用第三方插画。统一提示方向为水粉手绘、旧纸纹理、冷青木质与暖灯、无文字、无人物、严格正侧视。透明资源在 Godot 中裁切取样，未用脚本修改图像内容。
+
+| 项目资源路径 | 提示内容摘要 / 生成记录 |
+|---|---|
+| `assets/art/library_wall.png` | 平直后墙、书架和高窗、无地面家具；`daabb635-11ad-4b25-be9f-99107641a040` |
+| `assets/art/library_wall_cutout.png` | 编辑前述后墙，仅将窗玻璃开成透明区域，保留窗框；`e9c095f8-347b-497c-ac4f-79bcc9736275` |
+| `assets/art/campus_distant.png` | 雨雾中的校园楼宇、远山，横幅窗外远景；`4722640c-dc32-4f83-807f-2249eb35ad7b` |
+| `assets/art/library_desk.png` | 透明底、水平侧视旧木桌、纸页和小灯；`24a558f5-9c1b-4e91-8bdf-d751ccbae0c5` |
+| `assets/art/library_bench.png` | 透明底、水平侧视窄木长椅、旧坐垫；`46c92782-7081-4050-991a-6e4eb71f7a92` |
+| `assets/art/library_shelf.png` | 透明底、正面矮书架、旧书成排；`16df526a-e4a2-4703-8026-d65942fd7ee1` |
+| `assets/art/library_door.png` | 透明底、正面窄门、旧木与玻璃；`c50b332f-7226-46d5-9cb0-3aa10371d0ea` |
+
+新增脚步、拾回、击中及翻页声音由 `tools/build_feedback_audio.py` 合成，无采样录音；角色依然是分区 cutout 姿态动画，不应标作逐帧手绘动画。
+
 Noto Sans SC variable font，来自 [Google Fonts 的 Noto Sans SC 目录](https://github.com/google/fonts/tree/main/ofl/notosanssc)，许可为 SIL Open Font License 1.1。随工程保留 `assets/fonts/OFL.txt`。UI 使用可编辑 FontVariation 调整字重。
 
 ## 音频和图标

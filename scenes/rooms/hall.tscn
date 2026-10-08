@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/room_art.gd" id="e1"]
 
@@ -11,6 +11,8 @@
 [ext_resource type="FontVariation" path="res://resources/chinese_font.tres" id="e5"]
 
 [ext_resource type="Script" path="res://scripts/moving_platform.gd" id="e6"]
+
+[ext_resource type="Script" path="res://scripts/shortcut_stairs.gd" id="stairs"]
 
 [sub_resource type="RectangleShape2D" id="s1"]
 size = Vector2(3600, 120)
@@ -26,6 +28,9 @@ size = Vector2(150, 24)
 
 [sub_resource type="RectangleShape2D" id="s5"]
 size = Vector2(330, 24)
+
+[sub_resource type="RectangleShape2D" id="stair_shape"]
+size = Vector2(110, 18)
 
 [node name="教学走廊" type="Node2D"]
 metadata/width = 3600
@@ -230,3 +235,58 @@ target = ""
 entry = Vector2(150, 580)
 requirement = ""
 echo_allowed = false
+
+[node name="RecoveryAnchor" type="Marker2D" parent="."]
+position = Vector2(150, 623)
+
+[node name="FoldingStairs" type="Node2D" parent="."]
+script = ExtResource("stairs")
+
+[node name="StairLatch" type="Node2D" parent="."]
+script = ExtResource("e2")
+position = Vector2(2170, 318)
+kind = "shortcut"
+stable_id = "hall_stairs_open"
+title = "展开折叠楼梯"
+
+[node name="Step0" type="StaticBody2D" parent="FoldingStairs"]
+position = Vector2(2110, 414)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FoldingStairs/Step0"]
+shape = SubResource("stair_shape")
+one_way_collision = true
+disabled = true
+
+[node name="Surface" type="Polygon2D" parent="FoldingStairs/Step0"]
+polygon = PackedVector2Array(-55,-9,55,-9,55,9,-55,9)
+color = Color(0.45,0.43,0.33,1)
+
+[node name="Step1" type="StaticBody2D" parent="FoldingStairs"]
+position = Vector2(2210, 502)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FoldingStairs/Step1"]
+shape = SubResource("stair_shape")
+one_way_collision = true
+disabled = true
+
+[node name="Surface" type="Polygon2D" parent="FoldingStairs/Step1"]
+polygon = PackedVector2Array(-55,-9,55,-9,55,9,-55,9)
+color = Color(0.45,0.43,0.33,1)
+
+[node name="Step2" type="StaticBody2D" parent="FoldingStairs"]
+position = Vector2(2310, 590)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FoldingStairs/Step2"]
+shape = SubResource("stair_shape")
+one_way_collision = true
+disabled = true
+
+[node name="Surface" type="Polygon2D" parent="FoldingStairs/Step2"]
+polygon = PackedVector2Array(-55,-9,55,-9,55,9,-55,9)
+color = Color(0.45,0.43,0.33,1)

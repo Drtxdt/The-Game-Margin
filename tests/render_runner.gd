@@ -13,7 +13,6 @@ func run() -> void:
 	DirAccess.make_dir_recursive_absolute(output_dir)
 	state=root.get_node("State");state.save_path="user://render_qa.json";state.new_game()
 	state.flag("cooper_rescued");state.flag("ruler")
-	state.learn("math");state.learn("language");state.bind_books()
 	world=load("res://scenes/main.tscn").instantiate();root.add_child(world);current_scene=world
 	world.playing=true;world.ui.close_all()
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
@@ -21,13 +20,31 @@ func run() -> void:
 	AudioServer.set_bus_mute(0,true)
 	var samples=[]
 	for id in ["library","bell","archive"]:
+		var transition_start=Time.get_ticks_usec()
 		world.change_room(id,Vector2(900 if id=="library" else 1530,580))
+		await process_frame
+		await process_frame
+		var transition_ms=(Time.get_ticks_usec()-transition_start)/1000.0
+		world.ui.close_all()
 		await create_timer(1).timeout
-		world.player.invulnerable=100
+		world.player.invulnerable=0 if id=="library" else 100
 		if id=="library":
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png(output_dir+"/standalone-library-before.png")
-			state.learn("archive");state.bind_books();state.flag("boss_purified");world.update_library()
+			state.learn("math");state.learn("language");state.bind_books();world.update_library()
+			await create_timer(0.3).timeout
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(output_dir+"/library-basic.png")
+			state.flag("boss_purified");world.update_library()
+			await create_timer(0.3).timeout
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(output_dir+"/library-guardian-first.png")
+			state.data.flags.erase("boss_purified")
+			state.learn("archive");state.bind_books();world.update_library()
+			await create_timer(0.3).timeout
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(output_dir+"/library-archive-first.png")
+			state.flag("boss_purified");world.update_library()
 			await create_timer(1).timeout
 		var start=Time.get_ticks_usec()
 		var last=start
@@ -40,6 +57,7 @@ func run() -> void:
 		var mean=times.reduce(func(a,b):return a+b,0.0)/times.size()
 		var sample={"room":id,"window":str(DisplayServer.window_get_size()),"viewport":str(root.get_visible_rect().size),"frames":times.size(),"mean_ms":mean,"p95_ms":sorted[int(sorted.size()*0.95)],"worst_ms":sorted.back(),"average_fps":1000.0/mean,"process_ms":Performance.get_monitor(Performance.TIME_PROCESS)*1000,"physics_ms":Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)*1000,"draw_calls":Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),"orphan_nodes":Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT),"memory_mb":Performance.get_monitor(Performance.MEMORY_STATIC)/1048576.0}
 		samples.append(sample);print("RENDER_SAMPLE ",JSON.stringify(sample))
+		sample.transition_ms=transition_ms
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png(output_dir+"/standalone-"+id+".png")
 		if id=="library": state.data.flags.erase("boss_purified")

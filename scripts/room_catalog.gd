@@ -1,6 +1,28 @@
 class_name RoomCatalog
 extends RefCounted
 
+static var _exit_cache: Array = []
+static var _width_cache: Dictionary = {}
+
+static func exits() -> Array:
+	if not _exit_cache.is_empty(): return _exit_cache
+	# Read authored scene properties, without instantiating gameplay or duplicating topology.
+	for room_id in ROOMS:
+		var scene: PackedScene=load("res://scenes/rooms/%s.tscn" % room_id)
+		var scene_state=scene.get_state()
+		for node in range(scene_state.get_node_count()):
+			var props: Dictionary={}
+			for index in range(scene_state.get_node_property_count(node)):
+				props[str(scene_state.get_node_property_name(node,index))]=scene_state.get_node_property_value(node,index)
+			if node==0: _width_cache[room_id]=float(props.get("metadata/width",3200))
+			if props.get("kind","")=="exit":
+				_exit_cache.append({"room":room_id,"target":props.target,"id":props.stable_id,"requirement":props.get("requirement","")})
+	return _exit_cache
+
+static func width_for(room_id: String) -> float:
+	exits()
+	return float(_width_cache.get(room_id,3200))
+
 const ROOMS = {
 	"gate": ["校门外", "钟响之后", Vector2(0, 0), "学校广播已经停了。门口还有一只不肯离开的狗。"],
 	"courtyard": ["前院", "空无一人的早晨", Vector2(1, 0), "风把值日表翻到了昨天。"],

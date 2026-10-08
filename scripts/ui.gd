@@ -101,6 +101,10 @@ func refresh_hud() -> void:
 		objective="探索钟庭下方的研究层"
 	else:
 		objective="回到图书馆 · 仍有余页可寻"
+	for death in State.data.deaths:
+		if not death.books.is_empty():
+			objective="找回书包 · %s · %s 查看地图" % [RoomCatalog.ROOMS[death.room][0],State.key_name("map")]
+			break
 	$HUD/Objective.text=objective
 	$HUD/Footer.text="%s 交互    %s 观察    %s 地图    %s 暂停" % [State.key_name("interact"),State.key_name("observe"),State.key_name("map"),State.key_name("pause")]
 	if world.room_id=="gate" and not State.has_flag("cooper_rescued"):
@@ -117,13 +121,10 @@ func refresh_prompt() -> void:
 		return
 	var item=world.nearest_interactable(world.player)
 	$Prompt.text="[%s]  %s" % [State.key_name("interact"),item.title] if item else ""
-	for death in State.data.deaths:
-		if death.room==world.room_id and not death.books.is_empty() and world.player.position.distance_to(Vector2(death.point[0],death.point[1]))<100:
-			$Prompt.text="[%s] 找回散落的书" % State.key_name("interact")
 	if world.observing:
 		var message="观察 · 数学关系尚不可读"
 		if State.knows("math"):
-			message="观察 · 刻度显现：移动台按固定周期返回，硬质金属会返还冲击。"
+			message="观察 · 周期与距离已显现。留意端点、方向和到站时间。"
 			if world.room_id=="machine":
 				message="观察 · 增大施力端力臂：将支点移向负载，所需力量会减小。"
 			elif world.room_id=="security" and State.data.major=="politics":
@@ -242,9 +243,14 @@ func show_map() -> void:
 	$Map.visible=true
 	get_tree().paused=true
 	var notes="已探索 %d / 16 个房间    主修：%s\n" % [State.data.visited.size(),"物理" if State.data.major=="physics" else "政治"]
+	notes+="● 检查点　浅绿出口已开 / 棕色出口未开　↗ 永久捷径\n"
 	for death in State.data.deaths:
 		if not death.books.is_empty():
-			notes+="未归还的书落在："+RoomCatalog.ROOMS[death.room][0]+"\n"
+			notes+="▣ 书包："+RoomCatalog.ROOMS[death.room][0]+" · "+"、".join(death.books.map(func(book): return RoomCatalog.BOOK_NAMES[book]))+"\n"
+	var debts=0
+	for death in State.data.deaths:
+		if not death.recovered: debts+=1
+	notes+="◇ 待缝合亡响：%d　录响器：%s\n" % [debts,["未获得","录响","录响 / 缝页"][int(State.data.echo_tool_level)]]
 	$Map/Panel/Body/Notes.text=notes
 	$Map/Panel/Body/MapDrawing.queue_redraw()
 	$Map/Panel/Body/Close.grab_focus()
